@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lani OSAKA｜心斎橋のシーシャ&amp;アミューズメントラウンジ</title>
+<meta name="description" content="大阪・心斎橋のシーシャ&amp;アミューズメントラウンジ「Lani OSAKA」。シーシャ¥3,000〜、飲み放題1時間¥2,000（チャージなし）。ダーツ・カラオケも楽しめる、南国×アミューズメント×少し非日常の空間。20:00〜5:00 日曜定休。">
+<meta name="theme-color" content="#0b0b0a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lani OSAKA｜心斎橋のシーシャ&amp;アミューズメントラウンジ">
+<meta property="og:description" content="南国 × アミューズメント × 少し非日常。シーシャ¥3,000〜、飲み放題1時間¥2,000。20:00〜5:00 日曜定休。">
+<meta property="og:image" content="assets/flyer.jpg">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Shippori+Mincho:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0a; --bg2:#121110; --card:#161412;
+  --gold:#d6b26a; --gold-2:#b8914a; --gold-soft:rgba(214,178,106,.35);
+  --text:#f2ece0; --muted:#a8a092; --pink:#ff3d8b; --leaf:#5f8a4a;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN",serif;
+  --latin:"Cormorant Garamond","Shippori Mincho",serif;
+  --sans:"Noto Sans JP","Hiragino Sans",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.8;letter-spacing:.04em;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* header */
+.nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;padding-top:max(12px,env(safe-area-inset-top));transition:background .3s,backdrop-filter .3s}
+.nav.scrolled{background:rgba(11,11,10,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(214,178,106,.15)}
+.nav-logo img{height:40px;width:auto}
+.nav-links{display:flex;gap:22px;align-items:center;font-family:var(--latin);font-size:15px;letter-spacing:.18em;color:var(--gold)}
+.nav-links a:hover{color:var(--text)}
+.ig-btn{display:inline-flex;align-items:center;gap:8px}
+.ig-btn svg{width:20px;height:20px}
+.menu-toggle{display:none;background:none;border:0;color:var(--gold);width:40px;height:40px}
+.menu-toggle svg{width:26px;height:26px}
+@media (max-width:760px){
+  .menu-toggle{display:block}
+  .nav-links{position:fixed;inset:0;flex-direction:column;justify-content:center;gap:34px;font-size:22px;background:rgba(11,11,10,.97);opacity:0;pointer-events:none;transition:opacity .3s}
+  .nav-links.open{opacity:1;pointer-events:auto}
+  .nav-links .close{position:absolute;top:18px;right:18px}
+}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:grid;place-items:center;text-align:center;overflow:hidden}
+.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,10,.55) 0%,rgba(11,11,10,.35) 40%,rgba(11,11,10,.92) 100%)}
+.hero-inner{position:relative;z-index:2;padding:110px 20px 70px;display:flex;flex-direction:column;align-items:center}
+.hero-logo{width:min(300px,68vw);filter:drop-shadow(0 4px 24px rgba(0,0,0,.6))}
+.hero-tag{margin-top:26px;font-family:var(--serif);font-size:clamp(17px,4.6vw,24px);letter-spacing:.2em;color:var(--text)}
+.hero-tag b{font-weight:400;display:inline-block;white-space:nowrap}
+.hero-tag span{color:var(--gold);margin:0 .3em}
+.hero-info{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.chip{border:1px solid var(--gold-soft);background:rgba(11,11,10,.5);padding:6px 16px;font-size:13px;color:var(--gold);letter-spacing:.12em;backdrop-filter:blur(4px)}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font-family:var(--latin);font-size:12px;letter-spacing:.3em;color:var(--gold);opacity:.8}
+.scroll-hint::after{content:"";display:block;width:1px;height:36px;margin:8px auto 0;background:linear-gradient(var(--gold),transparent);animation:drip 2s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* sections */
+section{padding:96px 20px}
+.wrap{max-width:1080px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:48px}
+.sec-head .en{font-family:var(--latin);font-size:clamp(34px,8vw,52px);font-weight:500;letter-spacing:.14em;color:var(--gold);line-height:1.1;background:linear-gradient(180deg,#f0d79c,#b8914a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sec-head .ja{margin-top:8px;font-family:var(--serif);font-size:14px;letter-spacing:.3em;color:var(--muted)}
+.ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px auto 0;color:var(--gold)}
+.ornament::before,.ornament::after{content:"";width:46px;height:1px;background:var(--gold-soft)}
+.ornament i{width:6px;height:6px;border:1px solid var(--gold);transform:rotate(45deg)}
+
+/* concept */
+.concept{background:radial-gradient(ellipse at top,rgba(95,138,74,.12),transparent 60%),var(--bg)}
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.concept-text h3{font-family:var(--serif);font-weight:600;font-size:clamp(22px,5.4vw,30px);line-height:1.6;letter-spacing:.1em;margin-bottom:22px}
+.concept-text h3 em{font-style:normal;color:var(--gold)}
+.concept-text p{color:#d9d2c4;font-size:15px;margin-bottom:14px}
+.concept-img{position:relative}
+.concept-img img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.concept-img::before{content:"";position:absolute;inset:-12px 12px 12px -12px;border:1px solid var(--gold-soft);pointer-events:none}
+.concept-img img{position:relative;z-index:1}
+@media (max-width:760px){.concept-grid{grid-template-columns:1fr;gap:40px}.concept-img{margin:0 12px 0 24px}}
+
+/* features */
+.features{background:var(--bg2);border-block:1px solid rgba(214,178,106,.12)}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.feat{border:1px solid var(--gold-soft);padding:28px 14px 24px;text-align:center;background:linear-gradient(180deg,rgba(214,178,106,.06),transparent)}
+.feat svg{width:40px;height:40px;color:var(--gold);margin:0 auto 14px}
+.feat h4{font-family:var(--serif);font-size:17px;color:var(--gold);letter-spacing:.12em}
+.feat p{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.6}
+.feat strong{display:block;font-family:var(--latin);font-size:22px;color:var(--text);font-weight:600;margin-top:4px;letter-spacing:.06em}
+@media (max-width:760px){.feat-grid{grid-template-columns:1fr 1fr}}
+
+/* menu */
+.price-hero{text-align:center;margin-bottom:46px}
+.price-hero .label{font-family:var(--serif);color:var(--muted);letter-spacing:.3em;font-size:14px}
+.price-hero .big{font-family:var(--latin);font-weight:600;font-size:clamp(54px,15vw,92px);line-height:1;background:linear-gradient(180deg,#f6e1a8 10%,#b8914a 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.02em}
+.price-hero .big small{font-size:.5em}
+.price-hero .sub{margin-top:10px;font-size:14px;color:#d9d2c4}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{position:relative;background:var(--card);border:1px solid var(--gold-soft);padding:30px 26px 26px}
+.card::before{content:"";position:absolute;inset:5px;border:1px solid rgba(214,178,106,.14);pointer-events:none}
+.card h3{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;row-gap:0;font-family:var(--serif);font-weight:600;font-size:21px;color:var(--gold);letter-spacing:.14em;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--gold-soft)}
+.card h3 span{font-family:var(--latin);font-size:12px;letter-spacing:.2em;color:var(--muted);font-weight:500}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;font-size:15px}
+.row+.row{border-top:1px dotted rgba(214,178,106,.18)}
+.row .p{font-family:var(--latin);font-size:19px;font-weight:600;color:var(--text);white-space:nowrap;letter-spacing:.04em}
+.row .n small{display:block;font-size:12px;color:var(--muted)}
+.row.big .p{font-size:28px;color:var(--gold)}
+.tag{display:inline-block;margin-left:6px;padding:1px 8px;font-size:11px;background:var(--gold);color:#16130d;letter-spacing:.08em;vertical-align:middle}
+.sub-h{font-family:var(--latin);font-size:13px;letter-spacing:.24em;color:var(--gold);margin:18px 0 4px}
+.card .note{margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.card.wide{grid-column:1/-1}
+@media (max-width:760px){.menu-grid{grid-template-columns:1fr}.card{padding:26px 20px 22px}}
+
+details.lineup{margin-top:18px;border:1px solid var(--gold-soft);background:var(--card)}
+details.lineup summary{cursor:pointer;list-style:none;padding:18px 22px;font-family:var(--serif);color:var(--gold);letter-spacing:.14em;display:flex;justify-content:space-between;align-items:center}
+details.lineup summary::-webkit-details-marker{display:none}
+details.lineup summary::after{content:"+";font-family:var(--latin);font-size:24px;transition:transform .3s}
+details.lineup[open] summary::after{transform:rotate(45deg)}
+.lineup-body{padding:0 22px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.lineup-body h5{font-family:var(--latin);letter-spacing:.2em;color:var(--gold);font-size:14px;font-weight:600;border-bottom:1px solid var(--gold-soft);padding-bottom:4px;margin-bottom:8px}
+.lineup-body ul{list-style:none;font-size:14px;color:#d9d2c4;line-height:2}
+@media (max-width:760px){.lineup-body{grid-template-columns:1fr 1fr}}
+.menu-foot{margin-top:26px;text-align:center;font-size:13px;color:var(--muted);line-height:2}
+
+/* gallery */
+.gallery{background:var(--bg2)}
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gal-grid figure{position:relative;overflow:hidden;aspect-ratio:3/4}
+.gal-grid img,.gal-grid video{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.gal-grid figure:hover img{transform:scale(1.04)}
+.gal-grid figcaption{position:absolute;left:0;right:0;bottom:0;padding:30px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-family:var(--serif);font-size:13px;letter-spacing:.16em;color:var(--text)}
+@media (max-width:760px){.gal-grid{grid-template-columns:1fr 1fr}.gal-grid figure:first-child{grid-column:1/-1;aspect-ratio:4/5}}
+.ig-cta{margin-top:34px;text-align:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border:1px solid var(--gold);color:var(--gold);font-family:var(--serif);letter-spacing:.16em;font-size:15px;transition:background .3s,color .3s}
+.btn:hover{background:var(--gold);color:#16130d}
+.btn svg{width:20px;height:20px}
+.btn.solid{background:linear-gradient(180deg,#e2c27d,#b8914a);color:#16130d;border-color:transparent}
+
+/* access */
+.access-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:stretch}
+.info dl{display:grid;grid-template-columns:5.5em 1fr;row-gap:16px;column-gap:16px;font-size:15px}
+.info dt{font-family:var(--serif);color:var(--gold);letter-spacing:.14em}
+.info dd{color:#e6dfd1}
+.info .hours{font-family:var(--latin);font-size:26px;font-weight:600;letter-spacing:.06em;line-height:1.2;color:var(--text)}
+.info .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.map{min-height:340px;border:1px solid var(--gold-soft);overflow:hidden}
+.map iframe{width:100%;height:100%;min-height:340px;border:0;filter:grayscale(.6) invert(.9) hue-rotate(180deg) contrast(.9)}
+@media (max-width:760px){.access-grid{grid-template-columns:1fr}}
+
+footer{padding:56px 20px calc(40px + env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(214,178,106,.15);background:#080807}
+footer img{width:130px;margin:0 auto 18px;opacity:.9}
+footer .tag-line{font-family:var(--serif);letter-spacing:.2em;color:var(--gold);font-size:14px}
+footer .caution{margin-top:18px;font-size:12px;color:var(--muted)}
+footer .copy{margin-top:12px;font-family:var(--latin);font-size:12px;letter-spacing:.2em;color:#6d675d}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.scroll-hint::after{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a href="#top" class="nav-logo" aria-label="Lani OSAKA トップへ"><img src="assets/logo-gold.png" alt="Lani OSAKA"></a>
+  <nav class="nav-links" id="navLinks">
+    <button class="menu-toggle close" aria-label="メニューを閉じる" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <a href="#concept" data-close>CONCEPT</a>
+    <a href="#menu" data-close>MENU</a>
+    <a href="#gallery" data-close>GALLERY</a>
+    <a href="#access" data-close>ACCESS</a>
+    <a href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" class="ig-btn" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
+  </nav>
+  <button class="menu-toggle" id="menuOpen" aria-label="メニューを開く"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</header>
+
+<main id="top">
+  <section class="hero" style="padding:0">
+    <img class="poster" src="assets/entrance-poster.jpg" alt="">
+    <video autoplay muted loop playsinline preload="auto" poster="assets/entrance-poster.jpg" aria-hidden="true">
+      <source src="assets/entrance.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <h1><img class="hero-logo" src="assets/logo-gold.png" alt="Lani OSAKA Amusement Lounge"></h1>
+      <p class="hero-tag"><b>南国</b><span>×</span><b>アミューズメント</b><span>×</span><b>少し非日常</b></p>
+      <div class="hero-info">
+        <span class="chip">OPEN 20:00 – 5:00</span>
+        <span class="chip">心斎橋</span>
+        <span class="chip">日曜定休</span>
+      </div>
+    </div>
+    <div class="scroll-hint">SCROLL</div>
+  </section>
+
+  <section class="concept" id="concept">
+    <div class="wrap">
+      <div class="sec-head reveal"><div class="en">Concept</div><div class="ja">コンセプト</div><div class="ornament"><i></i></div></div>
+      <div class="concept-grid">
+        <div class="concept-text reveal">
+          <h3>心斎橋の夜に、<br><em>南国の楽園</em>を。</h3>
+          <p>扉を開けると、グリーンの壁とネオンが迎える小さなジャングル。Lani（ラニ）は、ハワイ語で「天国」「空」を意味する言葉です。</p>
+          <p>100種類以上のフレーバーから選べるシーシャに、飲み放題、ダーツ、カラオケ。ゆったりくつろぐのも、仲間とワイワイ盛り上がるのも自由。</p>
+          <p>いつもの夜を、少しだけ非日常に。</p>
+        </div>
+        <div class="concept-img reveal"><img src="assets/sofa.jpg" alt="グリーンウォールとソファ席の店内" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="wrap feat-grid">
+      <div class="feat reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 6h12l-2 5h-8z"/><path d="M14 13h20"/><path d="M24 13v14"/><path d="M20 27h8l1 3c4 2 6 5 6 9 0 2-1 3-3 3H16c-2 0-3-1-3-3 0-4 2-7 6-9z"/><path d="M28 32c6 0 10-2 12-6"/></svg>
+        <h4>シーシャ</h4><strong>¥3,000〜</strong><p>100種類以上の<br>フレーバー</p>
+      </div>
+      <div class="feat reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="11"/><circle cx="24" cy="24" r="4"/><path d="M24 6v8M24 34v8M6 24h8M34 24h8"/></svg>
+        <h4>ダーツ</h4><strong>1PLAY ¥100</strong><p>気軽に対戦<br>初心者も大歓迎</p>
+      </div>
+      <div class="feat reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="31" cy="14" r="8"/><path d="M25 19L10 36l3 3 17-15"/><path d="M27 10l8 8"/></svg>
+        <h4>カラオケ</h4><strong>歌い放題</strong><p>好きな曲で<br>思いきり<br>盛り上がろう</p>
+      </div>
+      <div class="feat reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="8" y="12" width="24" height="30" rx="2" transform="rotate(-8 20 27)"/><rect x="16" y="8" width="24" height="30" rx="2"/><path d="M28 18c-2-3-6-1-4 2l4 4 4-4c2-3-2-5-4-2z"/></svg>
+        <h4>ショップカード</h4><strong>ポイント</strong><p>来店ごとに<br>ポイントが貯まる</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu">
+    <div class="wrap">
+      <div class="sec-head reveal"><div class="en">Menu</div><div class="ja">メニュー・料金</div><div class="ornament"><i></i></div></div>
+
+      <div class="price-hero reveal">
+        <div class="label">— シーシャ —</div>
+        <div class="big">SHISHA ¥3,000<small>〜</small></div>
+        <div class="sub">飲み放題 1時間 ¥2,000・チャージなし</div>
+      </div>
+
+      <div class="menu-grid">
+        <div class="card reveal">
+          <h3>飲み放題プラン<span>ALL-YOU-CAN-DRINK</span></h3>
+          <div class="row big"><div class="n">1時間<span class="tag">チャージなし</span><small>焼酎・ソフトドリンク・缶もの</small></div><div class="p">¥2,000</div></div>
+          <div class="row big"><div class="n">5:00以降 1時間</div><div class="p">¥3,000</div></div>
+          <div class="row"><div class="n">スタッフ飲み放題<small>スタッフ全員</small></div><div class="p">¥3,000</div></div>
+        </div>
+
+        <div class="card reveal">
+          <h3>シーシャ<span>SHISHA</span></h3>
+          <div class="row big"><div class="n">1台</div><div class="p">¥3,000</div></div>
+          <div class="row"><div class="n">ブロンドリーフ</div><div class="p">+¥0</div></div>
+          <div class="row"><div class="n">ダークリーフ（ハーフ）</div><div class="p">+¥500</div></div>
+          <div class="row"><div class="n">ダークリーフ（MAX）</div><div class="p">+¥1,000</div></div>
+          <p class="note">シェアチャージ無料／100種類以上のフレーバーを揃えています</p>
+        </div>
+
+        <div class="card reveal">
+          <h3>単品プラン<span>SINGLE ITEM</span></h3>
+          <div class="row"><div class="n">フリーチャージ</div><div class="p">¥1,000</div></div>
+          <div class="sub-h">DRINK</div>
+          <div class="row"><div class="n">ソフトドリンク</div><div class="p">¥500</div></div>
+          <div class="row"><div class="n">アルコール</div><div class="p">¥800</div></div>
+          <div class="row"><div class="n">缶もの</div><div class="p">¥1,000</div></div>
+          <div class="sub-h">PITCHER</div>
+          <div class="row"><div class="n">ピッチャー（中）</div><div class="p">¥5,000</div></div>
+          <div class="row"><div class="n">ピッチャー（大）</div><div class="p">¥8,000</div></div>
+          <div class="row"><div class="n">スタッフドリンク</div><div class="p">¥1,000</div></div>
+        </div>
+
+        <div class="card reveal">
+          <h3>ショット<span>SHOT DRINK</span></h3>
+          <div class="row"><div class="n">テキーラ・ウォッカ・イエガー・マルガリータ・コカレロ</div><div class="p">¥1,000</div></div>
+          <div class="row"><div class="n">アネホ・クライナー・コカボム</div><div class="p">¥1,200</div></div>
+          <h3 style="margin-top:24px">フード<span>FOOD</span></h3>
+          <div class="row"><div class="n">ポップコーン・フライドポテト・ミックスナッツ</div><div class="p">各¥500</div></div>
+          <div class="row"><div class="n">本日のラニ飯</div><div class="p">¥800〜</div></div>
+          <p class="note">その他フードメニューは店内掲示板をご覧ください</p>
+        </div>
+
+        <div class="card wide reveal">
+          <h3>シャンパン<span>CHAMPAGNE</span></h3>
+          <div class="row"><div class="n">Laniオリジナルシャンパン<small>甘口・辛口</small></div><div class="p">¥30,000 / ¥50,000</div></div>
+          <div class="row"><div class="n">ブーブクリコ イエロー</div><div class="p">¥30,000</div></div>
+          <div class="row"><div class="n">PJ</div><div class="p">¥35,000</div></div>
+          <div class="row"><div class="n">ベル エポック</div><div class="p">¥90,000</div></div>
+          <div class="row"><div class="n">エンジェルシャンパン</div><div class="p">¥150,000〜</div></div>
+        </div>
+      </div>
+
+      <details class="lineup reveal">
+        <summary>ドリンクラインナップを見る</summary>
+        <div class="lineup-body">
+          <div><h5>SOFT DRINK</h5><ul><li>緑茶</li><li>烏龍茶</li><li>ジャスミン茶</li><li>麦茶</li><li>爽健美茶</li><li>コーン茶</li><li>ミネラルウォーター</li><li>炭酸水</li></ul></div>
+          <div><h5>JUICE</h5><ul><li>オレンジ</li><li>アップル</li><li>マンゴー</li><li>グァバ</li><li>パイナップル</li><li>カルピス</li><li>コーラ</li><li>ジンジャーエール</li><li>クランベリー</li><li>コーヒー（HOT / ICE）</li></ul></div>
+          <div><h5>ALCOHOL</h5><ul><li>茉莉花</li><li>二階堂（麦）</li><li>黒霧島（芋）</li><li>鏡月</li><li>カシス</li><li>ミスティア</li><li>ハイボール</li></ul>
+            <h5 style="margin-top:14px">缶もの</h5><ul><li>淡麗グリーンラベル</li><li>氷結無糖レモン</li><li>つぶちゅーみかん</li><li>スラットシャルドネ</li></ul></div>
+        </div>
+      </details>
+
+      <p class="menu-foot">グループで同一プランを選択していただきます。<br>詳細はスタッフまでお尋ねください。</p>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="sec-head reveal"><div class="en">Gallery</div><div class="ja">店内の様子</div><div class="ornament"><i></i></div></div>
+      <div class="gal-grid">
+        <figure class="reveal"><img src="assets/neon.jpg" alt="Hello Laniのネオンサインとグリーンウォール" loading="lazy"><figcaption>Hello Lani</figcaption></figure>
+        <figure class="reveal"><img src="assets/shisha.jpg" alt="ハイビスカスを飾ったシーシャ" loading="lazy"><figcaption>Shisha</figcaption></figure>
+        <figure class="reveal"><img src="assets/sofa.jpg" alt="ゆったりとしたソファ席" loading="lazy"><figcaption>Lounge</figcaption></figure>
+      </div>
+      <div class="ig-cta reveal">
+        <a class="btn" href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>@lani.osaka をフォロー</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="access">
+    <div class="wrap">
+      <div class="sec-head reveal"><div class="en">Access</div><div class="ja">店舗情報・アクセス</div><div class="ornament"><i></i></div></div>
+      <div class="access-grid">
+        <div class="info reveal">
+          <dl>
+            <dt>店名</dt><dd>Lani OSAKA<br><small style="color:var(--muted)">Amusement Lounge</small></dd>
+            <dt>営業時間</dt><dd><span class="hours">20:00 – 5:00</span></dd>
+            <dt>定休日</dt><dd>日曜日</dd>
+            <dt>住所</dt><dd>〒542-0085<br>大阪府大阪市中央区心斎橋筋2丁目2-13<br>宝山心斎橋ビル 3F</dd>
+            <dt>SNS</dt><dd><a href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" style="color:var(--gold)">Instagram @lani.osaka</a></dd>
+          </dl>
+          <div class="btns">
+            <a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%BF%83%E6%96%8E%E6%A9%8B%E7%AD%8B2%E4%B8%81%E7%9B%AE2-13+%E5%AE%9D%E5%B1%B1%E5%BF%83%E6%96%8E%E6%A9%8B%E3%83%93%E3%83%AB" target="_blank" rel="noopener">Googleマップで開く</a>
+          </div>
+        </div>
+        <div class="map reveal">
+          <iframe title="Lani OSAKAの地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%BF%83%E6%96%8E%E6%A9%8B%E7%AD%8B2%E4%B8%81%E7%9B%AE2-13+%E5%AE%9D%E5%B1%B1%E5%BF%83%E6%96%8E%E6%A9%8B%E3%83%93%E3%83%AB&output=embed&hl=ja&z=17"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <img src="assets/logo-gold.png" alt="Lani OSAKA">
+  <p class="tag-line">皆様のご来店をお待ちしております。</p>
+  <p class="caution">※20歳未満の方のご利用はお断りしております。</p>
+  <p class="copy">© Lani OSAKA</p>
+</footer>
+
+<script>
+(function(){
+  var nav=document.getElementById('nav'),links=document.getElementById('navLinks');
+  function onScroll(){nav.classList.toggle('scrolled',window.scrollY>40)}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  document.getElementById('menuOpen').addEventListener('click',function(){links.classList.add('open')});
+  links.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',function(){links.classList.remove('open')})});
+  var els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(el){io.observe(el)});
+  }else{els.forEach(function(el){el.classList.add('in')})}
+})();
+</script>
+</body>
+</html>
