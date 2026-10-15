@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0b0a">
+<meta name="format-detection" content="telephone=no">
+<title>Lani OSAKA</title>
+<link rel="icon" href="img/logo-gold.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Shippori+Mincho:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#0b0b0a;--bg2:#121110;--card:#161412;--line:rgba(214,178,106,.32);--line2:rgba(214,178,106,.14);
+  --gold:#d6b26a;--gold-hi:#f3dca2;--gold-lo:#a9843f;
+  --text:#f2ece0;--muted:#a8a092;--pink:#ff3d8b;--green:#6fa257;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif CJK JP",serif;
+  --latin:"Cormorant Garamond","Shippori Mincho","Hiragino Mincho ProN",serif;
+  --sans:-apple-system,"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",sans-serif;
+  --tabH:64px;--safeB:env(safe-area-inset-bottom);--safeT:env(safe-area-inset-top);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);letter-spacing:.03em;overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%}
+
+/* layout */
+.views{position:fixed;inset:0 0 calc(var(--tabH) + var(--safeB)) 0}
+.view{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;padding-bottom:28px;background:radial-gradient(ellipse at 50% -10%,rgba(95,138,74,.18),transparent 55%),var(--bg)}
+.view.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.pad{padding:0 18px}
+.head{position:sticky;top:0;z-index:5;padding:calc(var(--safeT) + 12px) 18px 12px;background:linear-gradient(var(--bg) 70%,rgba(11,11,10,0));display:flex;align-items:center;justify-content:space-between}
+.head h1{font-family:var(--latin);font-weight:600;font-size:30px;letter-spacing:.16em;background:linear-gradient(180deg,var(--gold-hi),var(--gold-lo));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1}
+.head small{display:block;font-family:var(--serif);font-size:11px;letter-spacing:.3em;color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.head img{height:34px}
+.head .back{width:40px;height:40px;margin-left:-10px;color:var(--gold);display:none}
+.head .back.show{display:grid;place-items:center}
+.head .back svg{width:24px;height:24px}
+
+/* tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;height:calc(var(--tabH) + var(--safeB));padding-bottom:var(--safeB);display:flex;background:rgba(12,11,10,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line2)}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7d776c;font-size:10.5px;letter-spacing:.06em}
+.tabs svg{width:24px;height:24px}
+.tabs button.on{color:var(--gold)}
+
+/* home */
+.hero{position:relative;height:min(62vh,500px);overflow:hidden;margin-bottom:-60px}
+.hero video,.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,10,.45),rgba(11,11,10,.2) 40%,var(--bg) 96%)}
+.hero .logo{position:absolute;z-index:2;left:50%;top:calc(var(--safeT) + 46%);transform:translate(-50%,-50%);width:58%;max-width:260px;filter:drop-shadow(0 4px 20px rgba(0,0,0,.7))}
+.status{position:relative;z-index:3;margin:0 18px;padding:16px 18px;background:rgba(22,20,18,.92);border:1px solid var(--line);display:flex;align-items:center;gap:14px}
+.status .dot{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:0 0 auto}
+.status.open .dot{background:var(--green);box-shadow:0 0 0 4px rgba(111,162,87,.25)}
+.status.closed .dot{background:var(--pink)}
+.status b{font-family:var(--serif);font-size:17px;letter-spacing:.1em}
+.status span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 18px 0}
+.quick a,.quick button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 4px 12px;border:1px solid var(--line2);background:var(--card);font-size:11px;color:var(--text);letter-spacing:.04em}
+.quick svg{width:26px;height:26px;color:var(--gold)}
+.sec-t{display:flex;align-items:baseline;gap:10px;margin:30px 18px 12px}
+.sec-t h2{font-family:var(--latin);font-weight:600;font-size:22px;letter-spacing:.16em;color:var(--gold)}
+.sec-t span{font-family:var(--serif);font-size:11.5px;color:var(--muted);letter-spacing:.2em}
+.mini-stamp{margin:0 18px;padding:18px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(214,178,106,.12),rgba(214,178,106,.02));display:flex;align-items:center;gap:16px;width:calc(100% - 36px);text-align:left}
+.ring{position:relative;width:64px;height:64px;flex:0 0 auto}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--latin);font-size:20px;font-weight:600}
+.mini-stamp p{font-size:12.5px;color:var(--muted);line-height:1.6}
+.mini-stamp h3{font-family:var(--serif);font-size:16px;color:var(--gold);letter-spacing:.1em}
+.news{margin:0 18px;border-top:1px solid var(--line2)}
+.news li{list-style:none;padding:14px 0;border-bottom:1px solid var(--line2)}
+.news time{font-family:var(--latin);font-size:13px;color:var(--gold);letter-spacing:.1em}
+.news h4{font-size:14.5px;margin-top:2px;font-weight:600}
+.news p{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.7}
+.concept{margin:0 18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.concept img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.concept-txt{margin:14px 18px 0;font-size:13.5px;color:#d9d2c4;line-height:1.9}
+
+/* menu */
+.price-hero{text-align:center;margin:6px 18px 22px;padding:22px 0;border:1px solid var(--line);background:linear-gradient(180deg,rgba(214,178,106,.08),transparent)}
+.price-hero .l{font-family:var(--serif);font-size:12px;color:var(--muted);letter-spacing:.3em}
+.price-hero .b{font-family:var(--latin);font-weight:600;font-size:48px;line-height:1.1;background:linear-gradient(180deg,var(--gold-hi),var(--gold-lo));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.price-hero .s{font-size:12.5px;color:#d9d2c4;margin-top:4px}
+.mcat{display:flex;gap:8px;overflow-x:auto;padding:0 18px 14px;scrollbar-width:none}
+.mcat::-webkit-scrollbar{display:none}
+.mcat button{flex:0 0 auto;padding:8px 16px;border:1px solid var(--line);font-size:13px;color:var(--muted);letter-spacing:.08em}
+.mcat button.on{background:var(--gold);color:#18140c;border-color:var(--gold);font-weight:700}
+.card{position:relative;margin:0 18px 14px;background:var(--card);border:1px solid var(--line);padding:22px 18px 18px}
+.card::before{content:"";position:absolute;inset:4px;border:1px solid var(--line2);pointer-events:none}
+.card h3{font-family:var(--serif);font-size:18px;color:var(--gold);letter-spacing:.12em;padding-bottom:10px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.card h3 span{font-family:var(--latin);font-size:11px;letter-spacing:.2em;color:var(--muted);margin-left:8px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;font-size:14px}
+.row+.row{border-top:1px dotted var(--line2)}
+.row .p{font-family:var(--latin);font-size:18px;font-weight:600;white-space:nowrap}
+.row small{display:block;font-size:11.5px;color:var(--muted)}
+.row.big .p{font-size:26px;color:var(--gold)}
+.tag{display:inline-block;margin-left:6px;padding:0 7px;font-size:10.5px;background:var(--gold);color:#16130d;vertical-align:middle}
+.sub-h{font-family:var(--latin);font-size:12px;letter-spacing:.24em;color:var(--gold);margin:14px 0 2px}
+.note{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.7}
+.list{columns:2;column-gap:18px;font-size:13.5px;color:#d9d2c4;line-height:2.1;list-style:none}
+.menu-foot{text-align:center;font-size:12px;color:var(--muted);margin:6px 18px 0;line-height:1.9}
+
+/* stamp */
+.stamp-card{position:relative;margin:4px 18px 0;padding:22px 16px 18px;background:linear-gradient(160deg,#1f1b15,#0f0d0a);border:1px solid var(--gold);box-shadow:inset 0 0 0 6px #120f0b,inset 0 0 0 7px var(--line)}
+.stamp-card .top{display:flex;justify-content:space-between;align-items:center;padding:0 6px 14px}
+.stamp-card .top img{height:44px}
+.stamp-card .top div{text-align:right;font-family:var(--latin);letter-spacing:.2em;color:var(--gold);font-size:13px}
+.stamp-card .top b{display:block;font-size:30px;color:var(--text);letter-spacing:.04em;line-height:1}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.slot{aspect-ratio:1;border-radius:50%;border:1px dashed var(--line);display:grid;place-items:center;font-family:var(--latin);font-size:15px;color:#5f594f;position:relative}
+.slot.got{border:1.5px solid var(--gold);background:radial-gradient(circle at 35% 30%,#3b3020,#14110c);color:transparent}
+.slot.got::after{content:"";position:absolute;inset:16%;background:url(img/logo-gold.png) center/contain no-repeat}
+.slot.goal{border-color:var(--pink);color:var(--pink);font-size:10px;font-family:var(--sans);font-weight:700;letter-spacing:0}
+.slot.goal.got{color:transparent}
+.slot.new{animation:stampIn .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stampIn{0%{transform:scale(2.2) rotate(-25deg);opacity:0}100%{transform:none;opacity:1}}
+.reward-txt{text-align:center;margin-top:14px;font-size:12.5px;color:var(--muted)}
+.reward-txt b{color:var(--gold);font-family:var(--serif)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;font-family:var(--serif);font-size:17px;letter-spacing:.18em;font-weight:700;color:#18140c;background:linear-gradient(180deg,#ecd08e,#b8914a);box-shadow:0 6px 24px rgba(214,178,106,.2);transition:transform .12s,opacity .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4}
+.btn.ghost{background:none;color:var(--gold);border:1px solid var(--line);box-shadow:none;font-size:14px;padding:13px}
+.btn.pink{background:linear-gradient(180deg,#ff6aa6,#d92a72);color:#fff}
+.stack{display:grid;gap:10px;margin:18px 18px 0}
+.howto{margin:22px 18px 0;padding:16px 18px;border:1px solid var(--line2);font-size:12.5px;color:var(--muted);line-height:1.9}
+.howto b{color:var(--gold);font-weight:500}
+.ticket{margin:18px 18px 0;padding:20px;text-align:center;border:2px dashed var(--pink);background:rgba(255,61,139,.08)}
+.ticket .k{font-family:var(--latin);letter-spacing:.3em;color:var(--pink);font-size:13px}
+.ticket h3{font-family:var(--serif);font-size:22px;margin:6px 0 4px}
+.ticket p{font-size:12px;color:var(--muted)}
+.ticket .btn{margin-top:14px}
+
+/* pin pad */
+.sheet{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(5,5,4,.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.sheet.show{display:flex;animation:fade .2s}
+.sheet-body{width:100%;max-width:480px;background:#14120f;border-top:1px solid var(--gold);padding:22px 22px calc(22px + var(--safeB));animation:up .3s ease}
+@keyframes up{from{transform:translateY(40%)}to{transform:none}}
+.sheet h3{text-align:center;font-family:var(--serif);color:var(--gold);letter-spacing:.14em;font-size:17px}
+.sheet .sub{text-align:center;font-size:12px;color:var(--muted);margin-top:4px}
+.pin-dots{display:flex;justify-content:center;gap:16px;margin:20px 0}
+.pin-dots i{width:14px;height:14px;border-radius:50%;border:1px solid var(--gold)}
+.pin-dots i.f{background:var(--gold)}
+.pin-dots.err{animation:shake .4s}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.keys button{height:58px;border:1px solid var(--line2);background:var(--card);font-family:var(--latin);font-size:26px;font-weight:600}
+.keys button:active{background:#221e18}
+.keys .fn{font-family:var(--sans);font-size:13px;color:var(--muted)}
+
+/* games */
+.games{display:grid;gap:12px;margin:4px 18px 0}
+.game-btn{position:relative;display:flex;align-items:center;gap:14px;text-align:left;padding:18px 16px;background:linear-gradient(135deg,rgba(214,178,106,.10),rgba(214,178,106,.02));border:1px solid var(--line)}
+.game-btn:active{transform:scale(.98)}
+.game-btn .ic{flex:0 0 52px;height:52px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;color:var(--gold)}
+.game-btn .ic svg{width:28px;height:28px}
+.game-btn h3{font-family:var(--serif);font-size:18px;letter-spacing:.1em;color:var(--gold)}
+.game-btn p{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.6}
+.game-btn .ar{margin-left:auto;color:var(--gold);opacity:.7;font-size:20px}
+.gnote{margin:18px 18px 0;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.9}
+.gpanel{display:none}
+.gpanel.on{display:block;animation:fade .3s}
+.wheel-wrap{position:relative;width:min(84vw,380px);aspect-ratio:1;margin:8px auto 20px}
+.wheel-wrap canvas{width:100%;height:100%;display:block;border-radius:50%;box-shadow:0 0 0 3px var(--gold),0 0 0 9px #1a1712,0 0 0 10px var(--line),0 20px 60px rgba(0,0,0,.6)}
+.pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);border-left:15px solid transparent;border-right:15px solid transparent;border-top:28px solid var(--pink);filter:drop-shadow(0 3px 6px rgba(0,0,0,.6));z-index:2}
+.hub{position:absolute;inset:0;margin:auto;width:20%;height:20%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a3328,#0f0d0a);border:2px solid var(--gold);display:grid;place-items:center;font-family:var(--latin);font-size:18px;color:var(--gold);font-weight:600}
+.lbl{font-size:12px;color:var(--muted);letter-spacing:.14em;margin:18px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:6px 6px 6px 12px;border:1px solid var(--line);background:var(--card);font-size:13px}
+.chip button{width:24px;height:24px;color:var(--muted);font-size:16px}
+.presets{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.presets::-webkit-scrollbar{display:none}
+.presets button{flex:0 0 auto;padding:8px 14px;border:1px dashed var(--line);font-size:12.5px;color:var(--gold)}
+.add{display:flex;gap:8px;margin-top:10px}
+.add input{flex:1;min-width:0;padding:12px;background:var(--card);border:1px solid var(--line);color:var(--text);font:inherit;font-size:16px;outline:none;user-select:text;-webkit-user-select:text}
+.add button{padding:0 18px;border:1px solid var(--gold);color:var(--gold);font-size:14px}
+.cat-tabs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.cat-tabs button{padding:6px 12px;border:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.cat-tabs button.on{background:var(--gold);color:#18140c;border-color:var(--gold);font-weight:700}
+.deck-info{text-align:center;font-family:var(--latin);color:var(--muted);letter-spacing:.2em;font-size:13px}
+.card-stage{perspective:1200px;display:flex;justify-content:center;margin:14px 0 18px}
+.flip{position:relative;width:min(74vw,300px);aspect-ratio:5/7;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.3,1.3,.5,1)}
+.flip.open{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;border:1px solid var(--gold)}
+.back-face{background:repeating-linear-gradient(45deg,rgba(214,178,106,.06) 0 10px,transparent 10px 20px),#14120f;box-shadow:inset 0 0 0 8px #14120f,inset 0 0 0 9px var(--line)}
+.back-face img{width:56%}
+.back-face span{margin-top:16px;font-family:var(--serif);font-size:12px;letter-spacing:.3em;color:var(--muted)}
+.front-face{transform:rotateY(180deg);background:linear-gradient(160deg,#1f1b15,#0f0d0a);box-shadow:inset 0 0 0 9px transparent,inset 0 0 0 10px var(--line)}
+.front-face .c{font-family:var(--latin);font-size:12px;letter-spacing:.3em;color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:22px}
+.front-face .q{font-family:var(--serif);font-weight:700;font-size:clamp(19px,5.8vw,25px);line-height:1.65}
+.rr-setup{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stepper{border:1px solid var(--line);background:var(--card);padding:10px;text-align:center}
+.stepper .t{font-size:11.5px;color:var(--muted)}
+.stepper .ctrl{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.stepper button{width:36px;height:36px;border:1px solid var(--line);color:var(--gold);font-size:20px}
+.stepper b{font-family:var(--latin);font-size:28px;font-weight:600}
+.rr-status{text-align:center;margin:16px 0 12px;font-family:var(--serif);font-size:14px;color:var(--muted)}
+.rr-status b{color:var(--gold);font-size:19px;font-family:var(--latin)}
+.glasses{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px}
+.glass{position:relative;aspect-ratio:3/4;border:1px solid var(--line);background:var(--card);display:grid;place-items:center}
+.glass:active{transform:scale(.93)}
+.glass svg{width:52%;color:var(--gold);opacity:.85}
+.glass .n{position:absolute;top:4px;left:7px;font-family:var(--latin);font-size:12px;color:var(--muted)}
+.glass.safe{background:rgba(111,162,87,.14);border-color:rgba(111,162,87,.5)}
+.glass.safe svg{color:var(--green);opacity:.6}
+.glass.hit{background:rgba(255,61,139,.22);border-color:var(--pink);animation:shake .5s}
+.glass.hit svg{color:var(--pink);opacity:1}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-6px) rotate(-4deg)}40%{transform:translateX(6px) rotate(4deg)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* access */
+.info{margin:0 18px;border-top:1px solid var(--line2)}
+.info .r{display:grid;grid-template-columns:5.5em 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line2);font-size:14px}
+.info dt{font-family:var(--serif);color:var(--gold);letter-spacing:.1em}
+.info .hours{font-family:var(--latin);font-size:24px;font-weight:600;line-height:1.2}
+.map{margin:18px 18px 0;height:240px;border:1px solid var(--line);overflow:hidden;background:var(--card)}
+.map iframe{width:100%;height:100%;border:0;filter:grayscale(.6) invert(.9) hue-rotate(180deg) contrast(.9)}
+.links{display:grid;gap:10px;margin:18px 18px 0}
+.links a{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid var(--line);background:var(--card);font-size:14.5px}
+.links a svg{width:22px;height:22px;color:var(--gold);flex:0 0 auto}
+.links a span{margin-left:auto;color:var(--muted)}
+.foot{margin:26px 18px 0;text-align:center;font-size:11px;color:var(--muted);line-height:2}
+.foot a{color:var(--gold)}
+
+/* overlays */
+.overlay{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(5,5,4,.84);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.overlay.show{display:flex;animation:fade .25s}
+.result{width:100%;max-width:380px;text-align:center;padding:32px 22px 22px;background:linear-gradient(160deg,#211c15,#0f0d0a);border:1px solid var(--gold);box-shadow:inset 0 0 0 6px #0f0d0a,inset 0 0 0 7px var(--line);animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.result .k{font-family:var(--latin);letter-spacing:.35em;color:var(--gold);font-size:13px}
+.result .big{margin:14px 0 24px;font-family:var(--serif);font-weight:700;font-size:clamp(26px,8.5vw,36px);line-height:1.45;white-space:pre-line;word-break:break-word}
+.result p{font-size:13px;color:var(--muted);line-height:1.9;margin:-10px 0 22px}
+.result.hit{border-color:var(--pink)}
+.result.hit .k{color:var(--pink)}
+.result .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.flash{position:fixed;inset:0;z-index:65;pointer-events:none;background:var(--pink);opacity:0}
+.flash.go{animation:flash .6s}
+@keyframes flash{0%{opacity:.5}100%{opacity:0}}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+.toast{position:fixed;left:50%;bottom:calc(var(--tabH) + var(--safeB) + 16px);transform:translateX(-50%) translateY(20px);z-index:90;padding:10px 18px;background:#221e18;border:1px solid var(--line);font-size:13px;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){.flip{transition:none}.glass.hit,.slot.new{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="views">
+  <!-- HOME -->
+  <section class="view active" id="v-home">
+    <div class="hero">
+      <img class="bg" src="img/entrance-poster.jpg" alt="">
+      <video autoplay muted loop playsinline preload="auto" poster="img/entrance-poster.jpg"><source src="img/entrance.mp4" type="video/mp4"></video>
+      <img class="logo" src="img/logo-gold.png" alt="Lani OSAKA">
+    </div>
+    <div class="status" id="status"><i class="dot"></i><div><b id="statusMain"></b><span id="statusSub"></span></div></div>
+    <div class="quick" id="quick"></div>
+
+    <div class="sec-t"><h2>Stamp</h2><span>スタンプカード</span></div>
+    <button class="mini-stamp" data-tab="stamp">
+      <div class="ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="rgba(214,178,106,.18)" stroke-width="3"/><circle id="ringArc" cx="18" cy="18" r="15.5" fill="none" stroke="#d6b26a" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 100" pathLength="100"/></svg><b id="ringNum">0</b></div>
+      <div><h3 id="miniTitle"></h3><p id="miniSub"></p></div>
+    </button>
+
+    <div class="sec-t"><h2>News</h2><span>お知らせ</span></div>
+    <ul class="news" id="news"></ul>
+
+    <div class="sec-t"><h2>Concept</h2><span>コンセプト</span></div>
+    <div class="concept"><img src="img/neon.jpg" alt="Hello Laniのネオン"><img src="img/shisha.jpg" alt="シーシャ"></div>
+    <p class="concept-txt">南国 × アミューズメント × 少し非日常。<br>グリーンの壁とネオンに囲まれた心斎橋の小さなジャングルで、100種類以上のフレーバーから選べるシーシャと、ダーツ・カラオケをお楽しみください。</p>
+  </section>
+
+  <!-- MENU -->
+  <section class="view" id="v-menu">
+    <div class="head"><h1>Menu<small>メニュー・料金</small></h1><img src="img/logo-gold.png" alt=""></div>
+    <div class="price-hero"><div class="l">— シーシャ —</div><div class="b">¥3,000〜</div><div class="s">飲み放題 1時間 ¥2,000・チャージなし</div></div>
+    <div class="mcat" id="mcat"></div>
+    <div id="menuBody"></div>
+    <p class="menu-foot">グループで同一プランを選択していただきます。<br>料金は税込です。詳細はスタッフまでお尋ねください。</p>
+  </section>
+
+  <!-- STAMP -->
+  <section class="view" id="v-stamp">
+    <div class="head"><h1>Stamp<small>スタンプカード</small></h1><span></span></div>
+    <div class="stamp-card">
+      <div class="top"><img src="img/logo-gold.png" alt="Lani"><div>STAMPS<b><span id="sNum">0</span><small style="font-size:16px;color:var(--muted)"> / <span id="sGoal">10</span></small></b></div></div>
+      <div class="grid" id="sGrid"></div>
+      <div class="reward-txt" id="sReward"></div>
+    </div>
+    <div id="ticketBox"></div>
+    <div class="stack"><button class="btn" id="stampBtn">スタンプを押してもらう</button></div>
+    <div class="howto">
+      <b>使い方</b><br>
+      ① ご来店時に「スタンプを押してもらう」をタップ<br>
+      ② スマホをスタッフに渡してください<br>
+      ③ スタッフが暗証番号を入力するとスタンプが押されます<br>
+      ※スタンプは1日1回までです。<br>
+      ※スタンプはこのスマホに保存されます。アプリを削除すると消えてしまうのでご注意ください。
+    </div>
+    <p class="foot">これまでの特典利用：<span id="sDone">0</span> 回</p>
+  </section>
+
+  <!-- GAME -->
+  <section class="view" id="v-game">
+    <div class="head"><div style="display:flex;align-items:center"><button class="back" id="gBack" aria-label="戻る"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button><h1 id="gTitle">Game<small>パーティーゲーム</small></h1></div><img src="img/logo-gold.png" alt=""></div>
+
+    <div class="gpanel on" id="g-list">
+      <div class="games">
+        <button class="game-btn" data-game="roulette"><span class="ic"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="16" cy="16" r="12"/><path d="M16 4v24M4 16h24M7.5 7.5l17 17M24.5 7.5l-17 17"/><circle cx="16" cy="16" r="3" fill="currentColor"/></svg></span><span><h3>ルーレット</h3><p>名前や罰ゲームを入れて回すだけ</p></span><span class="ar">›</span></button>
+        <button class="game-btn" data-game="cards"><span class="ic"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="8" width="15" height="20" rx="2" transform="rotate(-10 12 18)"/><rect x="12" y="5" width="15" height="20" rx="2"/><path d="M19.5 11v6M19.5 20v.5"/></svg></span><span><h3>お題カード</h3><p>めくって出たお題でトーク＆チャレンジ</p></span><span class="ar">›</span></button>
+        <button class="game-btn" data-game="russian"><span class="ic"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 5h14l-2 22H11z"/><path d="M10 12h12"/><circle cx="16" cy="19" r="2.5" fill="currentColor"/></svg></span><span><h3>ロシアンルーレット</h3><p>順番にグラスを選んで、当たりを引いたら…</p></span><span class="ar">›</span></button>
+      </div>
+      <p class="gnote">罰ゲームはソフトドリンクでもOK。<br>無理なく、楽しく遊びましょう。<br>20歳未満の飲酒は法律で禁止されています。</p>
+    </div>
+
+    <div class="gpanel pad" id="g-roulette">
+      <div class="wheel-wrap"><div class="pointer"></div><canvas id="wheel" width="760" height="760"></canvas><div class="hub">Lani</div></div>
+      <button class="btn" id="spinBtn">回す</button>
+      <div class="lbl">セット</div><div class="presets" id="presets"></div>
+      <div class="lbl">項目（<span id="itemCount">0</span>）</div><div class="chips" id="items"></div>
+      <form class="add" id="addForm"><input id="addInput" maxlength="16" placeholder="名前や罰ゲームを追加" enterkeyhint="done"><button type="submit">追加</button></form>
+    </div>
+
+    <div class="gpanel pad" id="g-cards">
+      <div class="cat-tabs" id="catTabs"></div>
+      <div class="deck-info" id="deckInfo"></div>
+      <div class="card-stage" id="cardStage"><div class="flip" id="flip"><div class="face back-face"><img src="img/logo-gold.png" alt=""><span>タップしてめくる</span></div><div class="face front-face"><div class="c" id="cardCat"></div><div class="q" id="cardQ"></div></div></div></div>
+      <button class="btn" id="drawBtn">めくる</button>
+    </div>
+
+    <div class="gpanel pad" id="g-russian">
+      <div class="rr-setup">
+        <div class="stepper"><div class="t">グラスの数</div><div class="ctrl"><button data-step="slots" data-d="-1">−</button><b id="slotsVal">12</b><button data-step="slots" data-d="1">＋</button></div></div>
+        <div class="stepper"><div class="t">当たりの数</div><div class="ctrl"><button data-step="hits" data-d="-1">−</button><b id="hitsVal">1</b><button data-step="hits" data-d="1">＋</button></div></div>
+      </div>
+      <div class="rr-status" id="rrStatus"></div>
+      <div class="glasses" id="glasses"></div>
+      <button class="btn ghost" id="rrReset">新しいゲーム</button>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section class="view" id="v-shop">
+    <div class="head"><h1>Shop<small>店舗情報・アクセス</small></h1><img src="img/logo-gold.png" alt=""></div>
+    <dl class="info">
+      <div class="r"><dt>店名</dt><dd>Lani OSAKA<br><small style="color:var(--muted)">Amusement Lounge</small></dd></div>
+      <div class="r"><dt>営業時間</dt><dd><span class="hours" id="iHours"></span></dd></div>
+      <div class="r"><dt>定休日</dt><dd id="iClosed"></dd></div>
+      <div class="r"><dt>住所</dt><dd id="iAddr"></dd></div>
+      <div class="r"><dt>設備</dt><dd>ダーツ（1PLAY ¥100）・カラオケ（歌い放題）</dd></div>
+    </dl>
+    <div class="map"><iframe id="mapFrame" title="地図" loading="lazy"></iframe></div>
+    <div class="links" id="links"></div>
+    <p class="foot">20歳未満の方のご利用はお断りしております。<br><a href="#" id="privacyLink">プライバシーポリシー</a><br>© Lani OSAKA</p>
+  </section>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>ホーム</button>
+  <button data-tab="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3h8l-1 4H9z"/><path d="M12 7v7"/><path d="M9 14h6l.5 1.5c2 1 3 2.5 3 4.5 0 .6-.4 1-1 1H6.5c-.6 0-1-.4-1-1 0-2 1-3.5 3-4.5z"/></svg>メニュー</button>
+  <button data-tab="stamp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><path d="M12 10v4"/></svg>スタンプ</button>
+  <button data-tab="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>ゲーム</button>
+  <button data-tab="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0112 2.5a7 7 0 017 7C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>店舗</button>
+</nav>
+
+<!-- PIN sheet -->
+<div class="sheet" id="pinSheet">
+  <div class="sheet-body">
+    <h3 id="pinTitle">スタッフ確認</h3>
+    <p class="sub" id="pinSub">スタッフが暗証番号を入力してください</p>
+    <div class="pin-dots" id="pinDots"><i></i><i></i><i></i><i></i></div>
+    <div class="keys" id="keys"></div>
+  </div>
+</div>
+
+<!-- age gate -->
+<div class="overlay" id="ageGate">
+  <div class="result">
+    <img src="img/logo-gold.png" alt="" style="width:120px;margin:0 auto 14px">
+    <div class="k">WELCOME</div>
+    <div class="big" style="font-size:22px;margin:12px 0 10px">あなたは20歳以上ですか？</div>
+    <p>Lani OSAKAはお酒を提供するお店です。<br>20歳未満の方はご利用いただけません。</p>
+    <div class="row2"><button class="btn ghost" id="ageNo">いいえ</button><button class="btn" id="ageYes">はい</button></div>
+  </div>
+</div>
+
+<div class="flash" id="flash"></div>
+<canvas class="confetti" id="confetti"></canvas>
+<div class="overlay" id="overlay"><div class="result" id="result"><div class="k" id="resK"></div><div class="big" id="resBig"></div><button class="btn" id="resClose">OK</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

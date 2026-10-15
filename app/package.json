@@ -1,0 +1,23 @@
+{
+  "name": "lani-osaka-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lani OSAKA 公式アプリ",
+  "scripts": {
+    "setup": "sh setup.sh",
+    "sync": "npx cap sync",
+    "ios": "npx cap open ios",
+    "android": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}
