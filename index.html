@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lani OSAKA｜心斎橋のシーシャ&amp;アミューズメントラウンジ">
 <meta property="og:description" content="南国 × アミューズメント × 少し非日常。シーシャ¥3,000〜、飲み放題1時間¥2,000。20:00〜5:00 日曜定休。">
-<meta property="og:image" content="assets/flyer.jpg">
+<meta property="og:image" content="https://yzkqlb-a11y.github.io/lani-osaka-site/assets/flyer.jpg">
 <link rel="icon" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,179 +17,300 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Shippori+Mincho:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0b0a; --bg2:#121110; --card:#161412;
-  --gold:#d6b26a; --gold-2:#b8914a; --gold-soft:rgba(214,178,106,.35);
-  --text:#f2ece0; --muted:#a8a092; --pink:#ff3d8b; --leaf:#5f8a4a;
-  --serif:"Shippori Mincho","Hiragino Mincho ProN",serif;
-  --latin:"Cormorant Garamond","Shippori Mincho",serif;
-  --sans:"Noto Sans JP","Hiragino Sans",sans-serif;
+  --bg:#0b0b0a;--bg2:#121110;--card:#161412;
+  --gold:#d6b26a;--gold-hi:#f6e1a8;--gold-lo:#a9843f;--gold-soft:rgba(214,178,106,.35);--line2:rgba(214,178,106,.14);
+  --text:#f2ece0;--muted:#a8a092;--pink:#ff3d8b;--green:#6fa257;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Noto Serif CJK JP",serif;
+  --latin:"Cormorant Garamond","Shippori Mincho","Hiragino Mincho ProN",serif;
+  --sans:"Noto Sans JP","Hiragino Sans","Noto Sans CJK JP",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --tabH:0px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.8;letter-spacing:.04em;overflow-x:hidden}
-img,video{display:block;max-width:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:auto}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.8;letter-spacing:.04em;overflow-x:hidden;padding-bottom:calc(var(--tabH) + env(safe-area-inset-bottom))}
+img,video,canvas{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto}
 
-/* header */
-.nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;padding-top:max(12px,env(safe-area-inset-top));transition:background .3s,backdrop-filter .3s}
-.nav.scrolled{background:rgba(11,11,10,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(214,178,106,.15)}
-.nav-logo img{height:40px;width:auto}
-.nav-links{display:flex;gap:22px;align-items:center;font-family:var(--latin);font-size:15px;letter-spacing:.18em;color:var(--gold)}
-.nav-links a:hover{color:var(--text)}
-.ig-btn{display:inline-flex;align-items:center;gap:8px}
-.ig-btn svg{width:20px;height:20px}
-.menu-toggle{display:none;background:none;border:0;color:var(--gold);width:40px;height:40px}
-.menu-toggle svg{width:26px;height:26px}
+/* ===== loader ===== */
+#loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;transition:transform 1.1s var(--ease) .1s,opacity .6s ease .7s}
+#loader.done{transform:translateY(-100%);opacity:0;pointer-events:none}
+#loader .lg{position:relative;width:min(220px,52vw);opacity:0;filter:blur(14px);transform:scale(.92);animation:lgIn 1.3s var(--ease) .15s forwards}
+#loader .lg::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,245,215,.85) 50%,transparent 65%);background-size:250% 100%;background-position:150% 0;-webkit-mask:url(assets/logo-gold.png) center/contain no-repeat;mask:url(assets/logo-gold.png) center/contain no-repeat;animation:sweep 1.3s ease .9s forwards}
+#loader .bar{position:absolute;bottom:18%;left:50%;width:120px;height:1px;margin-left:-60px;background:var(--line2);overflow:hidden}
+#loader .bar i{display:block;height:100%;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:left;animation:bar 1.6s var(--ease) forwards}
+@keyframes lgIn{to{opacity:1;filter:blur(0);transform:none}}
+@keyframes sweep{to{background-position:-50% 0}}
+@keyframes bar{to{transform:scaleX(1)}}
+
+/* ===== cursor glow (pc) ===== */
+#glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(214,178,106,.10),transparent 60%);opacity:0;transition:opacity .4s;will-change:transform}
+@media (hover:hover) and (pointer:fine){body.ready #glow{opacity:1}}
+
+/* ===== header / tabs ===== */
+.nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;padding-top:max(12px,env(safe-area-inset-top));transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(11,11,10,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--line2)}
+.nav-logo img{height:42px;width:auto;transition:transform .5s var(--ease)}
+.nav-logo:hover img{transform:scale(1.06)}
+.toptabs{display:flex;gap:6px;align-items:center}
+.toptabs a{position:relative;padding:8px 14px;font-family:var(--latin);font-size:15px;letter-spacing:.22em;color:var(--muted);transition:color .3s}
+.toptabs a::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .5s var(--ease)}
+.toptabs a:hover,.toptabs a.on{color:var(--gold)}
+.toptabs a.on::after{transform:scaleX(1)}
+.toptabs .ig{padding:8px;color:var(--gold)}
+.toptabs svg,.mobile-ig svg{width:20px;height:20px}
+.mobile-ig{display:none;color:var(--gold);padding:8px}
+.tabbar{display:none}
 @media (max-width:760px){
-  .menu-toggle{display:block}
-  .nav-links{position:fixed;inset:0;flex-direction:column;justify-content:center;gap:34px;font-size:22px;background:rgba(11,11,10,.97);opacity:0;pointer-events:none;transition:opacity .3s}
-  .nav-links.open{opacity:1;pointer-events:auto}
-  .nav-links .close{position:absolute;top:18px;right:18px}
+  :root{--tabH:64px}
+  .toptabs{display:none}
+  .mobile-ig{display:block}
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;height:calc(var(--tabH) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:rgba(12,11,10,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line2)}
+  .tabbar a{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7d776c;font-size:10.5px;letter-spacing:.06em;transition:color .3s}
+  .tabbar a svg{width:23px;height:23px;transition:transform .4s var(--ease)}
+  .tabbar a.on{color:var(--gold)}
+  .tabbar a.on svg{transform:translateY(-2px)}
+  .tabbar a::before{content:"";position:absolute;top:0;left:30%;right:30%;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .5s var(--ease)}
+  .tabbar a.on::before{transform:scaleX(1)}
 }
 
-/* hero */
-.hero{position:relative;min-height:100svh;display:grid;place-items:center;text-align:center;overflow:hidden}
-.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,10,.55) 0%,rgba(11,11,10,.35) 40%,rgba(11,11,10,.92) 100%)}
-.hero-inner{position:relative;z-index:2;padding:110px 20px 70px;display:flex;flex-direction:column;align-items:center}
-.hero-logo{width:min(300px,68vw);filter:drop-shadow(0 4px 24px rgba(0,0,0,.6))}
-.hero-tag{margin-top:26px;font-family:var(--serif);font-size:clamp(17px,4.6vw,24px);letter-spacing:.2em;color:var(--text)}
-.hero-tag b{font-weight:400;display:inline-block;white-space:nowrap}
-.hero-tag span{color:var(--gold);margin:0 .3em}
-.hero-info{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.chip{border:1px solid var(--gold-soft);background:rgba(11,11,10,.5);padding:6px 16px;font-size:13px;color:var(--gold);letter-spacing:.12em;backdrop-filter:blur(4px)}
-.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font-family:var(--latin);font-size:12px;letter-spacing:.3em;color:var(--gold);opacity:.8}
-.scroll-hint::after{content:"";display:block;width:1px;height:36px;margin:8px auto 0;background:linear-gradient(var(--gold),transparent);animation:drip 2s infinite}
+/* ===== views ===== */
+.view{display:none}
+.view.active{display:block}
+.view.enter{animation:viewIn .8s var(--ease) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+section{padding:96px 20px;position:relative}
+
+/* ===== hero ===== */
+.hero{position:relative;height:100svh;min-height:560px;padding:0;overflow:hidden;display:grid;place-items:center;text-align:center}
+.hero .media{position:absolute;inset:-6% 0;will-change:transform}
+.hero .media video,.hero .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.18);transition:transform 2.6s var(--ease)}
+body.ready .hero .media video,body.ready .hero .media img{transform:scale(1)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,10,.6) 0%,rgba(11,11,10,.3) 40%,rgba(11,11,10,.95) 100%);z-index:1}
+.smoke{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;mix-blend-mode:screen}
+.hero-inner{position:relative;z-index:3;padding:90px 20px 60px;display:flex;flex-direction:column;align-items:center;will-change:transform,opacity}
+.hero-logo{position:relative;width:min(300px,66vw);filter:drop-shadow(0 6px 30px rgba(0,0,0,.7))}
+.hero-logo img{width:100%;opacity:0;transform:translateY(20px) scale(.96);filter:blur(10px);transition:opacity 1.6s var(--ease) .3s,transform 1.6s var(--ease) .3s,filter 1.6s var(--ease) .3s}
+body.ready .hero-logo img{opacity:1;transform:none;filter:none}
+.hero-logo::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,246,220,.9) 50%,transparent 60%);background-size:300% 100%;background-position:150% 0;-webkit-mask:url(assets/logo-gold.png) center/contain no-repeat;mask:url(assets/logo-gold.png) center/contain no-repeat;animation:sweep2 6s ease-in-out 2.2s infinite}
+@keyframes sweep2{0%{background-position:150% 0}30%,100%{background-position:-50% 0}}
+.hero-tag{margin-top:28px;font-family:var(--serif);font-size:clamp(17px,4.6vw,25px);letter-spacing:.2em;line-height:1.7}
+.hero-tag .w{display:inline-block;white-space:nowrap}
+.hero-tag .x{color:var(--gold);margin:0 .35em}
+.ch{display:inline-block;opacity:0;transform:translateY(.7em) rotate(6deg);filter:blur(6px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:calc(var(--d,0s) + var(--i) * 45ms)}
+.in .ch,.ch.in{opacity:1;transform:none;filter:none}
+.hero-info{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.chip{border:1px solid var(--gold-soft);background:rgba(11,11,10,.45);padding:6px 16px;font-size:13px;color:var(--gold);letter-spacing:.12em;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.chip.live{display:inline-flex;align-items:center;gap:8px}
+.chip.live i{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.chip.live.open i{background:var(--green);box-shadow:0 0 0 0 rgba(111,162,87,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(111,162,87,0)}100%{box-shadow:0 0 0 0 rgba(111,162,87,0)}}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;font-family:var(--latin);font-size:12px;letter-spacing:.3em;color:var(--gold);opacity:.85}
+.scroll-hint::after{content:"";display:block;width:1px;height:38px;margin:8px auto 0;background:linear-gradient(var(--gold),transparent);animation:drip 2.2s infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-/* sections */
-section{padding:96px 20px}
-.wrap{max-width:1080px;margin:0 auto}
-.sec-head{text-align:center;margin-bottom:48px}
-.sec-head .en{font-family:var(--latin);font-size:clamp(34px,8vw,52px);font-weight:500;letter-spacing:.14em;color:var(--gold);line-height:1.1;background:linear-gradient(180deg,#f0d79c,#b8914a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.sec-head .ja{margin-top:8px;font-family:var(--serif);font-size:14px;letter-spacing:.3em;color:var(--muted)}
-.ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px auto 0;color:var(--gold)}
-.ornament::before,.ornament::after{content:"";width:46px;height:1px;background:var(--gold-soft)}
-.ornament i{width:6px;height:6px;border:1px solid var(--gold);transform:rotate(45deg)}
+/* ===== page banner (sub tabs) ===== */
+.banner{position:relative;height:46vh;min-height:300px;max-height:460px;padding:0;overflow:hidden;display:grid;place-items:center;text-align:center}
+.banner img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;will-change:transform}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,10,.55),rgba(11,11,10,.55) 50%,var(--bg))}
+.banner .t{position:relative;z-index:3;padding-top:40px}
 
-/* concept */
-.concept{background:radial-gradient(ellipse at top,rgba(95,138,74,.12),transparent 60%),var(--bg)}
-.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.concept-text h3{font-family:var(--serif);font-weight:600;font-size:clamp(22px,5.4vw,30px);line-height:1.6;letter-spacing:.1em;margin-bottom:22px}
-.concept-text h3 em{font-style:normal;color:var(--gold)}
+/* ===== headings ===== */
+.sec-head{text-align:center;margin-bottom:52px}
+.en{font-family:var(--latin);font-size:clamp(40px,10vw,64px);font-weight:500;letter-spacing:.14em;line-height:1.05}
+.shine{background:linear-gradient(100deg,var(--gold-lo) 0%,var(--gold) 30%,var(--gold-hi) 45%,#fff6dc 50%,var(--gold-hi) 55%,var(--gold) 70%,var(--gold-lo) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 5s linear infinite}
+@keyframes shine{from{background-position:120% 0}to{background-position:-130% 0}}
+.en.shine{background:none;-webkit-text-fill-color:initial;animation:none}
+.en.shine .ch{background:linear-gradient(100deg,var(--gold-lo) 0%,var(--gold) 30%,var(--gold-hi) 45%,#fff6dc 50%,var(--gold-hi) 55%,var(--gold) 70%,var(--gold-lo) 100%);background-size:600% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 6s linear infinite;animation-delay:calc(var(--i) * -.18s)}
+.ja{margin-top:10px;font-family:var(--serif);font-size:14px;letter-spacing:.32em;color:var(--muted)}
+.ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:16px auto 0}
+.ornament::before,.ornament::after{content:"";width:46px;height:1px;background:var(--gold-soft);transform:scaleX(0);transition:transform 1.2s var(--ease) .4s}
+.ornament::before{transform-origin:right}.ornament::after{transform-origin:left}
+.ornament i{width:6px;height:6px;border:1px solid var(--gold);transform:rotate(45deg) scale(0);transition:transform .8s var(--ease) .3s}
+.in .ornament::before,.in .ornament::after{transform:scaleX(1)}
+.in .ornament i{transform:rotate(45deg) scale(1)}
+
+/* ===== reveal system ===== */
+[data-r]{opacity:0;transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease),clip-path 1.4s var(--ease);transition-delay:var(--d,0s)}
+[data-r="up"]{transform:translateY(40px)}
+[data-r="blur"]{filter:blur(12px);transform:translateY(20px)}
+[data-r="left"]{transform:translateX(-50px)}
+[data-r="right"]{transform:translateX(50px)}
+[data-r="mask"]{opacity:1;overflow:hidden}
+[data-r="mask"]::after{content:"";position:absolute;inset:-1px;z-index:5;background:var(--bg);transform-origin:top;transition:transform 1.4s var(--ease);transition-delay:var(--d,0s);pointer-events:none}
+[data-r="mask"].in::after{transform:scaleY(0)}
+[data-r="mask"] img{transform:scale(1.3);transition:transform 1.8s var(--ease)}
+[data-r].in{opacity:1;transform:none;filter:none}
+[data-r="mask"].in img{transform:scale(1)}
+.no-js [data-r],.reduce [data-r]{opacity:1;transform:none;filter:none}
+.no-js [data-r="mask"]::after,.reduce [data-r="mask"]::after{display:none}
+
+/* ===== concept ===== */
+.concept{background:radial-gradient(ellipse at top,rgba(95,138,74,.14),transparent 60%),var(--bg)}
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.concept-text h3{font-family:var(--serif);font-weight:600;font-size:clamp(24px,5.8vw,34px);line-height:1.6;letter-spacing:.1em;margin-bottom:24px}
+.concept-text h3 em{font-style:normal}
 .concept-text p{color:#d9d2c4;font-size:15px;margin-bottom:14px}
 .concept-img{position:relative}
-.concept-img img{width:100%;aspect-ratio:4/5;object-fit:cover}
-.concept-img::before{content:"";position:absolute;inset:-12px 12px 12px -12px;border:1px solid var(--gold-soft);pointer-events:none}
-.concept-img img{position:relative;z-index:1}
-@media (max-width:760px){.concept-grid{grid-template-columns:1fr;gap:40px}.concept-img{margin:0 12px 0 24px}}
+.concept-img .frame{position:absolute;inset:-14px 14px 14px -14px;border:1px solid var(--gold-soft);pointer-events:none}
+.concept-img .pic{position:relative;overflow:hidden;aspect-ratio:4/5}
+.concept-img .pic img{width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){.concept-grid{grid-template-columns:1fr;gap:44px}.concept-img{margin:0 14px 0 28px}}
 
-/* features */
-.features{background:var(--bg2);border-block:1px solid rgba(214,178,106,.12)}
+/* ===== marquee ===== */
+.marquee{overflow:hidden;padding:26px 0;border-block:1px solid var(--line2);background:var(--bg2)}
+.marquee .track{display:flex;width:max-content;animation:mq 38s linear infinite}
+.marquee span{font-family:var(--latin);font-size:clamp(28px,6vw,46px);letter-spacing:.18em;color:transparent;-webkit-text-stroke:1px rgba(214,178,106,.55);padding:0 28px;white-space:nowrap}
+.marquee span b{color:var(--gold);-webkit-text-stroke:0;font-weight:500}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ===== features ===== */
+.features{background:var(--bg2)}
 .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.feat{border:1px solid var(--gold-soft);padding:28px 14px 24px;text-align:center;background:linear-gradient(180deg,rgba(214,178,106,.06),transparent)}
-.feat svg{width:40px;height:40px;color:var(--gold);margin:0 auto 14px}
+.feat{position:relative;border:1px solid var(--gold-soft);padding:30px 14px 26px;text-align:center;background:linear-gradient(180deg,rgba(214,178,106,.07),transparent);transform-style:preserve-3d;transition:border-color .4s}
+.feat:hover{border-color:var(--gold)}
+.feat svg{width:42px;height:42px;color:var(--gold);margin:0 auto 14px}
+.feat svg *{stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset 2.2s var(--ease) calc(var(--d,0s) + .3s)}
+.feat.in svg *{stroke-dashoffset:0}
 .feat h4{font-family:var(--serif);font-size:17px;color:var(--gold);letter-spacing:.12em}
+.feat strong{display:block;font-family:var(--latin);font-size:23px;font-weight:600;margin-top:4px;letter-spacing:.06em}
 .feat p{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.6}
-.feat strong{display:block;font-family:var(--latin);font-size:22px;color:var(--text);font-weight:600;margin-top:4px;letter-spacing:.06em}
 @media (max-width:760px){.feat-grid{grid-template-columns:1fr 1fr}}
 
-/* menu */
-.price-hero{text-align:center;margin-bottom:46px}
-.price-hero .label{font-family:var(--serif);color:var(--muted);letter-spacing:.3em;font-size:14px}
-.price-hero .big{font-family:var(--latin);font-weight:600;font-size:clamp(54px,15vw,92px);line-height:1;background:linear-gradient(180deg,#f6e1a8 10%,#b8914a 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.02em}
-.price-hero .big small{font-size:.5em}
-.price-hero .sub{margin-top:10px;font-size:14px;color:#d9d2c4}
+/* ===== tab cards (home → tabs) ===== */
+.go-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.go{position:relative;display:block;overflow:hidden;aspect-ratio:3/4;border:1px solid var(--gold-soft)}
+.go img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease),filter .6s}
+.go .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.85))}
+.go:hover img{transform:scale(1.08);filter:brightness(1.1)}
+.go .lab{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;display:flex;align-items:flex-end;justify-content:space-between}
+.go .lab b{display:block;font-family:var(--latin);font-weight:500;font-size:30px;letter-spacing:.14em;color:var(--gold);line-height:1}
+.go .lab small{font-family:var(--serif);font-size:12px;letter-spacing:.2em;color:#ddd5c6}
+.go .arr{width:38px;height:38px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);transition:background .4s,color .4s,transform .5s var(--ease)}
+.go:hover .arr{background:var(--gold);color:#16130d;transform:translateX(4px)}
+@media (max-width:760px){.go-grid{grid-template-columns:1fr;gap:12px}.go{aspect-ratio:16/9}}
+
+/* ===== menu ===== */
+.price-hero{position:relative;text-align:center;margin-bottom:40px;padding:34px 0;overflow:hidden}
+.price-hero .smoke{mix-blend-mode:screen}
+.price-hero .label{position:relative;z-index:3;font-family:var(--serif);color:var(--muted);letter-spacing:.3em;font-size:14px}
+.price-hero .big{position:relative;z-index:3;font-family:var(--latin);font-weight:600;font-size:clamp(56px,16vw,104px);line-height:1;letter-spacing:.02em}
+.price-hero .big small{font-size:.45em}
+.price-hero .sub{position:relative;z-index:3;margin-top:12px;font-size:14px;color:#d9d2c4}
+.subtabs{position:sticky;top:66px;z-index:20;display:flex;justify-content:center;gap:8px;padding:12px 0;margin:0 -20px 26px;background:rgba(11,11,10,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);overflow-x:auto;scrollbar-width:none}
+.subtabs::-webkit-scrollbar{display:none}
+.subtabs button{flex:0 0 auto;position:relative;padding:8px 18px;border:1px solid var(--gold-soft);font-size:13.5px;color:var(--muted);letter-spacing:.1em;transition:color .3s,background .3s,border-color .3s}
+.subtabs button.on{color:#16130d;background:var(--gold);border-color:var(--gold);font-weight:700}
+@media (max-width:760px){.subtabs{justify-content:flex-start;padding-left:20px;padding-right:20px}}
 .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.card{position:relative;background:var(--card);border:1px solid var(--gold-soft);padding:30px 26px 26px}
-.card::before{content:"";position:absolute;inset:5px;border:1px solid rgba(214,178,106,.14);pointer-events:none}
-.card h3{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;row-gap:0;font-family:var(--serif);font-weight:600;font-size:21px;color:var(--gold);letter-spacing:.14em;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--gold-soft)}
+.card{position:relative;background:var(--card);border:1px solid var(--gold-soft);padding:30px 26px 26px;scroll-margin-top:140px;transition:border-color .4s,box-shadow .4s}
+.card::before{content:"";position:absolute;inset:5px;border:1px solid var(--line2);pointer-events:none}
+.card:hover{border-color:var(--gold);box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 40px rgba(214,178,106,.06)}
+.card h3{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;font-family:var(--serif);font-weight:600;font-size:21px;color:var(--gold);letter-spacing:.14em;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--gold-soft)}
 .card h3 span{font-family:var(--latin);font-size:12px;letter-spacing:.2em;color:var(--muted);font-weight:500}
-.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;font-size:15px}
-.row+.row{border-top:1px dotted rgba(214,178,106,.18)}
-.row .p{font-family:var(--latin);font-size:19px;font-weight:600;color:var(--text);white-space:nowrap;letter-spacing:.04em}
-.row .n small{display:block;font-size:12px;color:var(--muted)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;font-size:15px}
+.row+.row{border-top:1px dotted var(--line2)}
+.row .p{font-family:var(--latin);font-size:19px;font-weight:600;white-space:nowrap;letter-spacing:.04em}
+.row small{display:block;font-size:12px;color:var(--muted)}
 .row.big .p{font-size:28px;color:var(--gold)}
-.tag{display:inline-block;margin-left:6px;padding:1px 8px;font-size:11px;background:var(--gold);color:#16130d;letter-spacing:.08em;vertical-align:middle}
+.tag{display:inline-block;margin-left:6px;padding:1px 8px;font-size:11px;background:var(--gold);color:#16130d;vertical-align:middle}
 .sub-h{font-family:var(--latin);font-size:13px;letter-spacing:.24em;color:var(--gold);margin:18px 0 4px}
-.card .note{margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.note{margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.list{columns:2;column-gap:20px;list-style:none;font-size:14px;color:#d9d2c4;line-height:2.1}
 .card.wide{grid-column:1/-1}
-@media (max-width:760px){.menu-grid{grid-template-columns:1fr}.card{padding:26px 20px 22px}}
+.list3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.list3 h5{font-family:var(--latin);letter-spacing:.2em;color:var(--gold);font-size:14px;font-weight:600;border-bottom:1px solid var(--gold-soft);padding-bottom:4px;margin-bottom:8px}
+.list3 ul{list-style:none;font-size:14px;color:#d9d2c4;line-height:2}
+@media (max-width:760px){.menu-grid{grid-template-columns:1fr}.card{padding:26px 20px 22px}.list3{grid-template-columns:1fr 1fr}}
+.menu-foot{margin-top:28px;text-align:center;font-size:13px;color:var(--muted);line-height:2}
 
-details.lineup{margin-top:18px;border:1px solid var(--gold-soft);background:var(--card)}
-details.lineup summary{cursor:pointer;list-style:none;padding:18px 22px;font-family:var(--serif);color:var(--gold);letter-spacing:.14em;display:flex;justify-content:space-between;align-items:center}
-details.lineup summary::-webkit-details-marker{display:none}
-details.lineup summary::after{content:"+";font-family:var(--latin);font-size:24px;transition:transform .3s}
-details.lineup[open] summary::after{transform:rotate(45deg)}
-.lineup-body{padding:0 22px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.lineup-body h5{font-family:var(--latin);letter-spacing:.2em;color:var(--gold);font-size:14px;font-weight:600;border-bottom:1px solid var(--gold-soft);padding-bottom:4px;margin-bottom:8px}
-.lineup-body ul{list-style:none;font-size:14px;color:#d9d2c4;line-height:2}
-@media (max-width:760px){.lineup-body{grid-template-columns:1fr 1fr}}
-.menu-foot{margin-top:26px;text-align:center;font-size:13px;color:var(--muted);line-height:2}
-
-/* gallery */
-.gallery{background:var(--bg2)}
-.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.gal-grid figure{position:relative;overflow:hidden;aspect-ratio:3/4}
-.gal-grid img,.gal-grid video{width:100%;height:100%;object-fit:cover;transition:transform .8s}
-.gal-grid figure:hover img{transform:scale(1.04)}
-.gal-grid figcaption{position:absolute;left:0;right:0;bottom:0;padding:30px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-family:var(--serif);font-size:13px;letter-spacing:.16em;color:var(--text)}
-@media (max-width:760px){.gal-grid{grid-template-columns:1fr 1fr}.gal-grid figure:first-child{grid-column:1/-1;aspect-ratio:4/5}}
-.ig-cta{margin-top:34px;text-align:center}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border:1px solid var(--gold);color:var(--gold);font-family:var(--serif);letter-spacing:.16em;font-size:15px;transition:background .3s,color .3s}
-.btn:hover{background:var(--gold);color:#16130d}
+/* ===== gallery ===== */
+.gal{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.gal figure{position:relative;overflow:hidden;cursor:zoom-in}
+.gal figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.gal figure:hover img{transform:scale(1.06)}
+.gal figure:nth-child(1){grid-column:span 4;aspect-ratio:4/5}
+.gal figure:nth-child(2){grid-column:span 2;aspect-ratio:2/5}
+.gal figure:nth-child(3){grid-column:span 3;aspect-ratio:3/4}
+.gal figure:nth-child(4){grid-column:span 3;aspect-ratio:3/4}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 14px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-family:var(--latin);font-size:16px;letter-spacing:.22em;color:var(--text)}
+@media (max-width:760px){.gal{grid-template-columns:1fr 1fr;gap:8px}.gal figure:nth-child(1){grid-column:1/-1;aspect-ratio:4/5}.gal figure:nth-child(2){grid-column:span 1;aspect-ratio:3/4}.gal figure:nth-child(3),.gal figure:nth-child(4){grid-column:span 1;aspect-ratio:3/4}.gal figure:nth-child(4){grid-column:1/-1;aspect-ratio:16/10}}
+.gal video{width:100%;height:100%;object-fit:cover}
+.lightbox{position:fixed;inset:0;z-index:150;display:none;place-items:center;padding:20px;background:rgba(5,5,4,.94)}
+.lightbox.show{display:grid;animation:fadeIn .4s ease}
+.lightbox img{max-height:86vh;width:auto;animation:zoomIn .6s var(--ease)}
+.lightbox button{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;width:44px;height:44px;color:var(--gold);font-size:30px}
+@keyframes fadeIn{from{opacity:0}}
+@keyframes zoomIn{from{transform:scale(.9);opacity:0}}
+.cta{margin-top:40px;text-align:center}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border:1px solid var(--gold);color:var(--gold);font-family:var(--serif);letter-spacing:.16em;font-size:15px;overflow:hidden;transition:color .5s var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease);z-index:-1}
+.btn:hover{color:#16130d}
+.btn:hover::before{transform:scaleX(1);transform-origin:left}
+.btn{z-index:0}
 .btn svg{width:20px;height:20px}
 .btn.solid{background:linear-gradient(180deg,#e2c27d,#b8914a);color:#16130d;border-color:transparent}
+.btn.solid::before{background:#f3dca2}
 
-/* access */
-.access-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:stretch}
-.info dl{display:grid;grid-template-columns:5.5em 1fr;row-gap:16px;column-gap:16px;font-size:15px}
+/* ===== access ===== */
+.access-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:stretch}
+.info dl{display:grid;grid-template-columns:5.5em 1fr;row-gap:18px;column-gap:16px;font-size:15px}
 .info dt{font-family:var(--serif);color:var(--gold);letter-spacing:.14em}
 .info dd{color:#e6dfd1}
-.info .hours{font-family:var(--latin);font-size:26px;font-weight:600;letter-spacing:.06em;line-height:1.2;color:var(--text)}
-.info .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.map{min-height:340px;border:1px solid var(--gold-soft);overflow:hidden}
-.map iframe{width:100%;height:100%;min-height:340px;border:0;filter:grayscale(.6) invert(.9) hue-rotate(180deg) contrast(.9)}
+.info .hours{font-family:var(--latin);font-size:28px;font-weight:600;letter-spacing:.06em;line-height:1.2}
+.info .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.map{min-height:360px;border:1px solid var(--gold-soft);overflow:hidden;background:var(--card)}
+.map iframe{width:100%;height:100%;min-height:360px;border:0;filter:grayscale(.6) invert(.9) hue-rotate(180deg) contrast(.9)}
 @media (max-width:760px){.access-grid{grid-template-columns:1fr}}
 
-footer{padding:56px 20px calc(40px + env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(214,178,106,.15);background:#080807}
+footer{padding:60px 20px 40px;text-align:center;border-top:1px solid var(--line2);background:#080807}
 footer img{width:130px;margin:0 auto 18px;opacity:.9}
-footer .tag-line{font-family:var(--serif);letter-spacing:.2em;color:var(--gold);font-size:14px}
+footer .tl{font-family:var(--serif);letter-spacing:.2em;color:var(--gold);font-size:14px}
 footer .caution{margin-top:18px;font-size:12px;color:var(--muted)}
+footer .links{margin-top:12px;font-size:12px;color:var(--muted)}
+footer .links a{color:var(--gold);margin:0 8px}
 footer .copy{margin-top:12px;font-family:var(--latin);font-size:12px;letter-spacing:.2em;color:#6d675d}
 
-/* reveal */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.scroll-hint::after{animation:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+  .marquee .track{animation:none}
+}
 </style>
 </head>
-<body>
+<body class="no-js">
+
+<div id="loader" aria-hidden="true"><img class="lg" src="assets/logo-gold.png" alt=""><div class="bar"><i></i></div></div>
+<div id="glow" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
-  <a href="#top" class="nav-logo" aria-label="Lani OSAKA トップへ"><img src="assets/logo-gold.png" alt="Lani OSAKA"></a>
-  <nav class="nav-links" id="navLinks">
-    <button class="menu-toggle close" aria-label="メニューを閉じる" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <a href="#concept" data-close>CONCEPT</a>
-    <a href="#menu" data-close>MENU</a>
-    <a href="#gallery" data-close>GALLERY</a>
-    <a href="#access" data-close>ACCESS</a>
-    <a href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" class="ig-btn" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
+  <a href="#home" class="nav-logo" aria-label="Lani OSAKA ホーム"><img src="assets/logo-gold.png" alt="Lani OSAKA"></a>
+  <nav class="toptabs" aria-label="メインメニュー">
+    <a href="#home" data-route="home">HOME</a>
+    <a href="#menu" data-route="menu">MENU</a>
+    <a href="#gallery" data-route="gallery">GALLERY</a>
+    <a href="#access" data-route="access">ACCESS</a>
+    <a href="game/">GAME</a>
+    <a class="ig" href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
   </nav>
-  <button class="menu-toggle" id="menuOpen" aria-label="メニューを開く"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="mobile-ig" href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
 </header>
 
-<main id="top">
-  <section class="hero" style="padding:0">
-    <img class="poster" src="assets/entrance-poster.jpg" alt="">
-    <video autoplay muted loop playsinline preload="auto" poster="assets/entrance-poster.jpg" aria-hidden="true">
-      <source src="assets/entrance.mp4" type="video/mp4">
-    </video>
-    <div class="hero-inner">
-      <h1><img class="hero-logo" src="assets/logo-gold.png" alt="Lani OSAKA Amusement Lounge"></h1>
-      <p class="hero-tag"><b>南国</b><span>×</span><b>アミューズメント</b><span>×</span><b>少し非日常</b></p>
-      <div class="hero-info">
-        <span class="chip">OPEN 20:00 – 5:00</span>
+<main>
+<!-- ================= HOME ================= -->
+<div class="view" id="v-home" data-view="home">
+  <section class="hero">
+    <div class="media" id="heroMedia">
+      <img src="assets/entrance-poster.jpg" alt="">
+      <video autoplay muted loop playsinline preload="auto" poster="assets/entrance-poster.jpg" aria-hidden="true"><source src="assets/entrance.mp4" type="video/mp4"></video>
+    </div>
+    <canvas class="smoke" data-smoke="1"></canvas>
+    <div class="hero-inner" id="heroInner">
+      <h1 class="hero-logo"><img src="assets/logo-gold.png" alt="Lani OSAKA Amusement Lounge"></h1>
+      <p class="hero-tag" id="heroTag" style="--d:1.2s"><span class="w" data-split>南国</span><span class="x">×</span><span class="w" data-split>アミューズメント</span><span class="x">×</span><span class="w" data-split>少し非日常</span></p>
+      <div class="hero-info" data-r="up" style="--d:1.9s">
+        <span class="chip live" id="liveChip"><i></i><span id="liveTxt">OPEN 20:00 – 5:00</span></span>
         <span class="chip">心斎橋</span>
         <span class="chip">日曜定休</span>
       </div>
@@ -197,174 +318,341 @@ footer .copy{margin-top:12px;font-family:var(--latin);font-size:12px;letter-spac
     <div class="scroll-hint">SCROLL</div>
   </section>
 
-  <section class="concept" id="concept">
+  <section class="concept">
     <div class="wrap">
-      <div class="sec-head reveal"><div class="en">Concept</div><div class="ja">コンセプト</div><div class="ornament"><i></i></div></div>
+      <div class="sec-head" data-head><div class="en shine" data-split>Concept</div><div class="ja">コンセプト</div><div class="ornament"><i></i></div></div>
       <div class="concept-grid">
-        <div class="concept-text reveal">
-          <h3>心斎橋の夜に、<br><em>南国の楽園</em>を。</h3>
-          <p>扉を開けると、グリーンの壁とネオンが迎える小さなジャングル。Lani（ラニ）は、ハワイ語で「天国」「空」を意味する言葉です。</p>
-          <p>100種類以上のフレーバーから選べるシーシャに、飲み放題、ダーツ、カラオケ。ゆったりくつろぐのも、仲間とワイワイ盛り上がるのも自由。</p>
-          <p>いつもの夜を、少しだけ非日常に。</p>
+        <div class="concept-text">
+          <h3 data-r="blur">心斎橋の夜に、<br><em class="shine">南国の楽園</em>を。</h3>
+          <p data-r="up" style="--d:.15s">扉を開けると、グリーンの壁とネオンが迎える小さなジャングル。Lani（ラニ）は、ハワイ語で「天国」「空」を意味する言葉です。</p>
+          <p data-r="up" style="--d:.3s">100種類以上のフレーバーから選べるシーシャに、飲み放題、ダーツ、カラオケ。ゆったりくつろぐのも、仲間とワイワイ盛り上がるのも自由。</p>
+          <p data-r="up" style="--d:.45s">いつもの夜を、少しだけ非日常に。</p>
         </div>
-        <div class="concept-img reveal"><img src="assets/sofa.jpg" alt="グリーンウォールとソファ席の店内" loading="lazy"></div>
+        <div class="concept-img">
+          <div class="frame" data-r="right" style="--d:.4s"></div>
+          <div class="pic" data-r="mask"><img src="assets/sofa.jpg" alt="グリーンウォールとソファ席の店内" loading="lazy" data-zoom></div>
+        </div>
       </div>
     </div>
   </section>
 
+  <div class="marquee" aria-hidden="true"><div class="track">
+    <span><b>SHISHA</b> · DARTS · KARAOKE · <b>ALL-YOU-CAN-DRINK</b> · TROPICAL · AMUSEMENT ·</span>
+    <span><b>SHISHA</b> · DARTS · KARAOKE · <b>ALL-YOU-CAN-DRINK</b> · TROPICAL · AMUSEMENT ·</span>
+  </div></div>
+
   <section class="features">
     <div class="wrap feat-grid">
-      <div class="feat reveal">
+      <div class="feat" data-r="up" data-tilt>
         <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 6h12l-2 5h-8z"/><path d="M14 13h20"/><path d="M24 13v14"/><path d="M20 27h8l1 3c4 2 6 5 6 9 0 2-1 3-3 3H16c-2 0-3-1-3-3 0-4 2-7 6-9z"/><path d="M28 32c6 0 10-2 12-6"/></svg>
         <h4>シーシャ</h4><strong>¥3,000〜</strong><p>100種類以上の<br>フレーバー</p>
       </div>
-      <div class="feat reveal">
+      <div class="feat" data-r="up" style="--d:.12s" data-tilt>
         <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="11"/><circle cx="24" cy="24" r="4"/><path d="M24 6v8M24 34v8M6 24h8M34 24h8"/></svg>
         <h4>ダーツ</h4><strong>1PLAY ¥100</strong><p>気軽に対戦<br>初心者も大歓迎</p>
       </div>
-      <div class="feat reveal">
+      <div class="feat" data-r="up" style="--d:.24s" data-tilt>
         <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="31" cy="14" r="8"/><path d="M25 19L10 36l3 3 17-15"/><path d="M27 10l8 8"/></svg>
-        <h4>カラオケ</h4><strong>歌い放題</strong><p>好きな曲で<br>思いきり<br>盛り上がろう</p>
+        <h4>カラオケ</h4><strong>歌い放題</strong><p>好きな曲で<br>思いきり盛り上がろう</p>
       </div>
-      <div class="feat reveal">
+      <div class="feat" data-r="up" style="--d:.36s" data-tilt>
         <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="8" y="12" width="24" height="30" rx="2" transform="rotate(-8 20 27)"/><rect x="16" y="8" width="24" height="30" rx="2"/><path d="M28 18c-2-3-6-1-4 2l4 4 4-4c2-3-2-5-4-2z"/></svg>
         <h4>ショップカード</h4><strong>ポイント</strong><p>来店ごとに<br>ポイントが貯まる</p>
       </div>
     </div>
   </section>
 
-  <section id="menu">
+  <section>
     <div class="wrap">
-      <div class="sec-head reveal"><div class="en">Menu</div><div class="ja">メニュー・料金</div><div class="ornament"><i></i></div></div>
+      <div class="sec-head" data-head><div class="en shine" data-split>Explore</div><div class="ja">もっと見る</div><div class="ornament"><i></i></div></div>
+      <div class="go-grid">
+        <a class="go" href="#menu" data-r="mask"><img src="assets/shisha.jpg" alt="" loading="lazy"><span class="shade"></span><div class="lab"><div><b>Menu</b><small>メニュー・料金</small></div><span class="arr">→</span></div></a>
+        <a class="go" href="#gallery" data-r="mask" style="--d:.15s"><img src="assets/neon.jpg" alt="" loading="lazy"><span class="shade"></span><div class="lab"><div><b>Gallery</b><small>店内の様子</small></div><span class="arr">→</span></div></a>
+        <a class="go" href="#access" data-r="mask" style="--d:.3s"><img src="assets/sofa.jpg" alt="" loading="lazy"><span class="shade"></span><div class="lab"><div><b>Access</b><small>店舗情報・アクセス</small></div><span class="arr">→</span></div></a>
+      </div>
+    </div>
+  </section>
+</div>
 
-      <div class="price-hero reveal">
+<!-- ================= MENU ================= -->
+<div class="view" id="v-menu" data-view="menu">
+  <section class="banner"><img src="assets/shisha.jpg" alt="" data-para><div class="t sec-head" data-head style="margin:0"><div class="en shine" data-split>Menu</div><div class="ja">メニュー・料金</div><div class="ornament"><i></i></div></div></section>
+  <section style="padding-top:40px">
+    <div class="wrap">
+      <div class="price-hero" data-r="blur">
+        <canvas class="smoke" data-smoke="0.7"></canvas>
         <div class="label">— シーシャ —</div>
-        <div class="big">SHISHA ¥3,000<small>〜</small></div>
+        <div class="big shine">¥<span data-count="3000">3,000</span><small>〜</small></div>
         <div class="sub">飲み放題 1時間 ¥2,000・チャージなし</div>
       </div>
 
-      <div class="menu-grid">
-        <div class="card reveal">
-          <h3>飲み放題プラン<span>ALL-YOU-CAN-DRINK</span></h3>
-          <div class="row big"><div class="n">1時間<span class="tag">チャージなし</span><small>焼酎・ソフトドリンク・缶もの</small></div><div class="p">¥2,000</div></div>
-          <div class="row big"><div class="n">5:00以降 1時間</div><div class="p">¥3,000</div></div>
-          <div class="row"><div class="n">スタッフ飲み放題<small>スタッフ全員</small></div><div class="p">¥3,000</div></div>
-        </div>
+      <div class="subtabs" id="subtabs">
+        <button data-jump="m-plan" class="on">プラン</button>
+        <button data-jump="m-shisha">シーシャ</button>
+        <button data-jump="m-drink">ドリンク</button>
+        <button data-jump="m-food">フード</button>
+        <button data-jump="m-champ">シャンパン</button>
+      </div>
 
-        <div class="card reveal">
+      <div class="menu-grid">
+        <div class="card" id="m-plan" data-r="up" data-tilt>
+          <h3>飲み放題プラン<span>ALL-YOU-CAN-DRINK</span></h3>
+          <div class="row big"><div>1時間<span class="tag">チャージなし</span><small>焼酎・ソフトドリンク・缶もの</small></div><div class="p">¥2,000</div></div>
+          <div class="row big"><div>5:00以降 1時間</div><div class="p">¥3,000</div></div>
+          <div class="row"><div>スタッフ飲み放題<small>スタッフ全員</small></div><div class="p">¥3,000</div></div>
+        </div>
+        <div class="card" id="m-shisha" data-r="up" style="--d:.12s" data-tilt>
           <h3>シーシャ<span>SHISHA</span></h3>
-          <div class="row big"><div class="n">1台</div><div class="p">¥3,000</div></div>
-          <div class="row"><div class="n">ブロンドリーフ</div><div class="p">+¥0</div></div>
-          <div class="row"><div class="n">ダークリーフ（ハーフ）</div><div class="p">+¥500</div></div>
-          <div class="row"><div class="n">ダークリーフ（MAX）</div><div class="p">+¥1,000</div></div>
+          <div class="row big"><div>1台</div><div class="p">¥3,000</div></div>
+          <div class="row"><div>ブロンドリーフ</div><div class="p">+¥0</div></div>
+          <div class="row"><div>ダークリーフ（ハーフ）</div><div class="p">+¥500</div></div>
+          <div class="row"><div>ダークリーフ（MAX）</div><div class="p">+¥1,000</div></div>
           <p class="note">シェアチャージ無料／100種類以上のフレーバーを揃えています</p>
         </div>
-
-        <div class="card reveal">
+        <div class="card" id="m-drink" data-r="up" data-tilt>
           <h3>単品プラン<span>SINGLE ITEM</span></h3>
-          <div class="row"><div class="n">フリーチャージ</div><div class="p">¥1,000</div></div>
+          <div class="row"><div>フリーチャージ</div><div class="p">¥1,000</div></div>
           <div class="sub-h">DRINK</div>
-          <div class="row"><div class="n">ソフトドリンク</div><div class="p">¥500</div></div>
-          <div class="row"><div class="n">アルコール</div><div class="p">¥800</div></div>
-          <div class="row"><div class="n">缶もの</div><div class="p">¥1,000</div></div>
+          <div class="row"><div>ソフトドリンク</div><div class="p">¥500</div></div>
+          <div class="row"><div>アルコール</div><div class="p">¥800</div></div>
+          <div class="row"><div>缶もの</div><div class="p">¥1,000</div></div>
           <div class="sub-h">PITCHER</div>
-          <div class="row"><div class="n">ピッチャー（中）</div><div class="p">¥5,000</div></div>
-          <div class="row"><div class="n">ピッチャー（大）</div><div class="p">¥8,000</div></div>
-          <div class="row"><div class="n">スタッフドリンク</div><div class="p">¥1,000</div></div>
+          <div class="row"><div>ピッチャー（中）</div><div class="p">¥5,000</div></div>
+          <div class="row"><div>ピッチャー（大）</div><div class="p">¥8,000</div></div>
+          <div class="row"><div>スタッフドリンク</div><div class="p">¥1,000</div></div>
         </div>
-
-        <div class="card reveal">
+        <div class="card" data-r="up" style="--d:.12s" data-tilt>
           <h3>ショット<span>SHOT DRINK</span></h3>
-          <div class="row"><div class="n">テキーラ・ウォッカ・イエガー・マルガリータ・コカレロ</div><div class="p">¥1,000</div></div>
-          <div class="row"><div class="n">アネホ・クライナー・コカボム</div><div class="p">¥1,200</div></div>
-          <h3 style="margin-top:24px">フード<span>FOOD</span></h3>
-          <div class="row"><div class="n">ポップコーン・フライドポテト・ミックスナッツ</div><div class="p">各¥500</div></div>
-          <div class="row"><div class="n">本日のラニ飯</div><div class="p">¥800〜</div></div>
+          <div class="row"><div>テキーラ・ウォッカ・イエガー・マルガリータ・コカレロ</div><div class="p">¥1,000</div></div>
+          <div class="row"><div>アネホ・クライナー・コカボム</div><div class="p">¥1,200</div></div>
+          <h3 id="m-food" style="margin-top:24px;scroll-margin-top:140px">フード<span>FOOD</span></h3>
+          <div class="row"><div>ポップコーン・フライドポテト・ミックスナッツ</div><div class="p">各¥500</div></div>
+          <div class="row"><div>本日のラニ飯</div><div class="p">¥800〜</div></div>
           <p class="note">その他フードメニューは店内掲示板をご覧ください</p>
         </div>
-
-        <div class="card wide reveal">
+        <div class="card wide" data-r="up">
+          <h3>ドリンクラインナップ<span>LINEUP</span></h3>
+          <div class="list3">
+            <div><h5>SOFT DRINK</h5><ul><li>緑茶</li><li>烏龍茶</li><li>ジャスミン茶</li><li>麦茶</li><li>爽健美茶</li><li>コーン茶</li><li>ミネラルウォーター</li><li>炭酸水</li></ul></div>
+            <div><h5>JUICE</h5><ul><li>オレンジ</li><li>アップル</li><li>マンゴー</li><li>グァバ</li><li>パイナップル</li><li>カルピス</li><li>コーラ</li><li>ジンジャーエール</li><li>クランベリー</li><li>コーヒー（HOT / ICE）</li></ul></div>
+            <div><h5>ALCOHOL</h5><ul><li>茉莉花</li><li>二階堂（麦）</li><li>黒霧島（芋）</li><li>鏡月</li><li>カシス</li><li>ミスティア</li><li>ハイボール</li></ul>
+              <h5 style="margin-top:14px">缶もの</h5><ul><li>淡麗グリーンラベル</li><li>氷結無糖レモン</li><li>つぶちゅーみかん</li><li>スラットシャルドネ</li></ul></div>
+          </div>
+        </div>
+        <div class="card wide" id="m-champ" data-r="up">
           <h3>シャンパン<span>CHAMPAGNE</span></h3>
-          <div class="row"><div class="n">Laniオリジナルシャンパン<small>甘口・辛口</small></div><div class="p">¥30,000 / ¥50,000</div></div>
-          <div class="row"><div class="n">ブーブクリコ イエロー</div><div class="p">¥30,000</div></div>
-          <div class="row"><div class="n">PJ</div><div class="p">¥35,000</div></div>
-          <div class="row"><div class="n">ベル エポック</div><div class="p">¥90,000</div></div>
-          <div class="row"><div class="n">エンジェルシャンパン</div><div class="p">¥150,000〜</div></div>
+          <div class="row"><div>Laniオリジナルシャンパン<small>甘口・辛口</small></div><div class="p">¥30,000 / ¥50,000</div></div>
+          <div class="row"><div>ヴーヴ・クリコ イエロー</div><div class="p">¥30,000</div></div>
+          <div class="row"><div>PJ</div><div class="p">¥35,000</div></div>
+          <div class="row"><div>ベル エポック</div><div class="p">¥90,000</div></div>
+          <div class="row"><div>エンジェルシャンパン</div><div class="p">¥150,000〜</div></div>
         </div>
       </div>
-
-      <details class="lineup reveal">
-        <summary>ドリンクラインナップを見る</summary>
-        <div class="lineup-body">
-          <div><h5>SOFT DRINK</h5><ul><li>緑茶</li><li>烏龍茶</li><li>ジャスミン茶</li><li>麦茶</li><li>爽健美茶</li><li>コーン茶</li><li>ミネラルウォーター</li><li>炭酸水</li></ul></div>
-          <div><h5>JUICE</h5><ul><li>オレンジ</li><li>アップル</li><li>マンゴー</li><li>グァバ</li><li>パイナップル</li><li>カルピス</li><li>コーラ</li><li>ジンジャーエール</li><li>クランベリー</li><li>コーヒー（HOT / ICE）</li></ul></div>
-          <div><h5>ALCOHOL</h5><ul><li>茉莉花</li><li>二階堂（麦）</li><li>黒霧島（芋）</li><li>鏡月</li><li>カシス</li><li>ミスティア</li><li>ハイボール</li></ul>
-            <h5 style="margin-top:14px">缶もの</h5><ul><li>淡麗グリーンラベル</li><li>氷結無糖レモン</li><li>つぶちゅーみかん</li><li>スラットシャルドネ</li></ul></div>
-        </div>
-      </details>
-
-      <p class="menu-foot">グループで同一プランを選択していただきます。<br>詳細はスタッフまでお尋ねください。</p>
+      <p class="menu-foot" data-r="up">グループで同一プランを選択していただきます。<br>詳細はスタッフまでお尋ねください。</p>
     </div>
   </section>
+</div>
 
-  <section class="gallery" id="gallery">
+<!-- ================= GALLERY ================= -->
+<div class="view" id="v-gallery" data-view="gallery">
+  <section class="banner"><img src="assets/neon.jpg" alt="" data-para><div class="t sec-head" data-head style="margin:0"><div class="en shine" data-split>Gallery</div><div class="ja">店内の様子</div><div class="ornament"><i></i></div></div></section>
+  <section style="padding-top:40px">
     <div class="wrap">
-      <div class="sec-head reveal"><div class="en">Gallery</div><div class="ja">店内の様子</div><div class="ornament"><i></i></div></div>
-      <div class="gal-grid">
-        <figure class="reveal"><img src="assets/neon.jpg" alt="Hello Laniのネオンサインとグリーンウォール" loading="lazy"><figcaption>Hello Lani</figcaption></figure>
-        <figure class="reveal"><img src="assets/shisha.jpg" alt="ハイビスカスを飾ったシーシャ" loading="lazy"><figcaption>Shisha</figcaption></figure>
-        <figure class="reveal"><img src="assets/sofa.jpg" alt="ゆったりとしたソファ席" loading="lazy"><figcaption>Lounge</figcaption></figure>
+      <div class="gal">
+        <figure data-r="mask"><img src="assets/neon.jpg" alt="Hello Laniのネオンサイン" loading="lazy"><figcaption>Hello Lani</figcaption></figure>
+        <figure data-r="mask" style="--d:.15s"><video autoplay muted loop playsinline preload="none" poster="assets/entrance-poster.jpg"><source src="assets/entrance.mp4" type="video/mp4"></video><figcaption>Entrance</figcaption></figure>
+        <figure data-r="mask"><img src="assets/shisha.jpg" alt="ハイビスカスを飾ったシーシャ" loading="lazy"><figcaption>Shisha</figcaption></figure>
+        <figure data-r="mask" style="--d:.15s"><img src="assets/sofa.jpg" alt="ソファ席" loading="lazy"><figcaption>Lounge</figcaption></figure>
       </div>
-      <div class="ig-cta reveal">
+      <div class="cta" data-r="up">
         <a class="btn" href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>@lani.osaka をフォロー</a>
       </div>
     </div>
   </section>
+</div>
 
-  <section id="access">
-    <div class="wrap">
-      <div class="sec-head reveal"><div class="en">Access</div><div class="ja">店舗情報・アクセス</div><div class="ornament"><i></i></div></div>
-      <div class="access-grid">
-        <div class="info reveal">
-          <dl>
-            <dt>店名</dt><dd>Lani OSAKA<br><small style="color:var(--muted)">Amusement Lounge</small></dd>
-            <dt>営業時間</dt><dd><span class="hours">20:00 – 5:00</span></dd>
-            <dt>定休日</dt><dd>日曜日</dd>
-            <dt>住所</dt><dd>〒542-0085<br>大阪府大阪市中央区心斎橋筋2丁目2-13<br>宝山心斎橋ビル 3F</dd>
-            <dt>SNS</dt><dd><a href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" style="color:var(--gold)">Instagram @lani.osaka</a></dd>
-          </dl>
-          <div class="btns">
-            <a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%BF%83%E6%96%8E%E6%A9%8B%E7%AD%8B2%E4%B8%81%E7%9B%AE2-13+%E5%AE%9D%E5%B1%B1%E5%BF%83%E6%96%8E%E6%A9%8B%E3%83%93%E3%83%AB" target="_blank" rel="noopener">Googleマップで開く</a>
-          </div>
-        </div>
-        <div class="map reveal">
-          <iframe title="Lani OSAKAの地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%BF%83%E6%96%8E%E6%A9%8B%E7%AD%8B2%E4%B8%81%E7%9B%AE2-13+%E5%AE%9D%E5%B1%B1%E5%BF%83%E6%96%8E%E6%A9%8B%E3%83%93%E3%83%AB&output=embed&hl=ja&z=17"></iframe>
+<!-- ================= ACCESS ================= -->
+<div class="view" id="v-access" data-view="access">
+  <section class="banner"><img src="assets/sofa.jpg" alt="" data-para><div class="t sec-head" data-head style="margin:0"><div class="en shine" data-split>Access</div><div class="ja">店舗情報・アクセス</div><div class="ornament"><i></i></div></div></section>
+  <section style="padding-top:40px">
+    <div class="wrap access-grid">
+      <div class="info" data-r="left">
+        <dl>
+          <dt>店名</dt><dd>Lani OSAKA<br><small style="color:var(--muted)">Amusement Lounge</small></dd>
+          <dt>営業時間</dt><dd><span class="hours">20:00 – 5:00</span></dd>
+          <dt>定休日</dt><dd>日曜日</dd>
+          <dt>住所</dt><dd>〒542-0085<br>大阪府大阪市中央区心斎橋筋2丁目2-13<br>宝山心斎橋ビル 3F</dd>
+          <dt>設備</dt><dd>ダーツ（1PLAY ¥100）／カラオケ（歌い放題）</dd>
+          <dt>SNS</dt><dd><a href="https://www.instagram.com/lani.osaka/" target="_blank" rel="noopener" style="color:var(--gold)">Instagram @lani.osaka</a></dd>
+        </dl>
+        <div class="btns">
+          <a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%BF%83%E6%96%8E%E6%A9%8B%E7%AD%8B2%E4%B8%81%E7%9B%AE2-13+%E5%AE%9D%E5%B1%B1%E5%BF%83%E6%96%8E%E6%A9%8B%E3%83%93%E3%83%AB" target="_blank" rel="noopener">Googleマップで開く</a>
         </div>
       </div>
+      <div class="map" data-r="right" style="--d:.15s"><iframe id="mapFrame" title="Lani OSAKAの地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade" data-src="https://www.google.com/maps?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%BF%83%E6%96%8E%E6%A9%8B%E7%AD%8B2%E4%B8%81%E7%9B%AE2-13+%E5%AE%9D%E5%B1%B1%E5%BF%83%E6%96%8E%E6%A9%8B%E3%83%93%E3%83%AB&output=embed&hl=ja&z=17"></iframe></div>
     </div>
   </section>
+</div>
 </main>
 
 <footer>
   <img src="assets/logo-gold.png" alt="Lani OSAKA">
-  <p class="tag-line">皆様のご来店をお待ちしております。</p>
+  <p class="tl">皆様のご来店をお待ちしております。</p>
   <p class="caution">※20歳未満の方のご利用はお断りしております。</p>
+  <p class="links"><a href="game/">GAME</a><a href="privacy.html">プライバシーポリシー</a></p>
   <p class="copy">© Lani OSAKA</p>
 </footer>
 
+<nav class="tabbar" aria-label="タブ">
+  <a href="#home" data-route="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>ホーム</a>
+  <a href="#menu" data-route="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3h8l-1 4H9z"/><path d="M12 7v7"/><path d="M9 14h6l.5 1.5c2 1 3 2.5 3 4.5 0 .6-.4 1-1 1H6.5c-.6 0-1-.4-1-1 0-2 1-3.5 3-4.5z"/></svg>メニュー</a>
+  <a href="#gallery" data-route="gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>ギャラリー</a>
+  <a href="#access" data-route="access"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0112 2.5a7 7 0 017 7C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>アクセス</a>
+  <a href="game/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>ゲーム</a>
+</nav>
+
+<div class="lightbox" id="lightbox"><button aria-label="閉じる">×</button><img alt=""></div>
+
 <script>
 (function(){
-  var nav=document.getElementById('nav'),links=document.getElementById('navLinks');
-  function onScroll(){nav.classList.toggle('scrolled',window.scrollY>40)}
-  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
-  document.getElementById('menuOpen').addEventListener('click',function(){links.classList.add('open')});
-  links.querySelectorAll('[data-close]').forEach(function(el){el.addEventListener('click',function(){links.classList.remove('open')})});
-  var els=document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
-    els.forEach(function(el){io.observe(el)});
-  }else{els.forEach(function(el){el.classList.add('in')})}
+'use strict';
+var body=document.body;
+body.classList.remove('no-js');
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce)body.classList.add('reduce');
+var $=function(s,c){return (c||document).querySelector(s)},$$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+
+/* ---------- split text into characters ---------- */
+$$('[data-split]').forEach(function(el){
+  var t=el.textContent,i0=+(el.dataset.i0||0);el.textContent='';
+  Array.from(t).forEach(function(c,i){var s=document.createElement('span');s.className='ch';s.style.setProperty('--i',i+i0);s.textContent=c===' '?' ':c;el.appendChild(s)});
+});
+// hero tagline: continue index across words
+(function(){var n=0;$$('#heroTag .ch').forEach(function(c){c.style.setProperty('--i',n++)})})();
+
+/* ---------- loader ---------- */
+var seen=false;try{seen=sessionStorage.getItem('lani-loaded')==='1';sessionStorage.setItem('lani-loaded','1')}catch(e){}
+var loader=$('#loader');
+function start(){
+  loader.classList.add('done');body.classList.add('ready');
+  setTimeout(function(){$('#heroTag')&&$('#heroTag').classList.add('in')},50);
+  setTimeout(function(){loader.style.display='none'},1500);
+}
+if(seen||reduce){loader.style.display='none';body.classList.add('ready');$('#heroTag').classList.add('in')}
+else{var t0=Date.now();window.addEventListener('load',function(){setTimeout(start,Math.max(0,1700-(Date.now()-t0)))});setTimeout(start,4000)}
+
+/* ---------- reveal on scroll ---------- */
+var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);if(e.target.dataset.count!==undefined)countUp(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.08}):null;
+function observe(scope){
+  $$('[data-r],[data-head],[data-count]',scope).forEach(function(el){if(io&&!reduce)io.observe(el);else{el.classList.add('in')}});
+  $$('[data-head] [data-split]',scope).forEach(function(){});
+}
+// headings: when head comes in, its split chars animate via .in .ch
+function countUp(el){
+  if(reduce)return;var to=+el.dataset.count,t0=performance.now(),d=1600;
+  (function f(now){var p=Math.min(1,(now-t0)/d),v=Math.round(to*(1-Math.pow(1-p,4)));el.textContent=v.toLocaleString('ja-JP');if(p<1)requestAnimationFrame(f)})(t0);
+}
+
+/* ---------- tabs / routing ---------- */
+var routes=['home','menu','gallery','access'],cur=null,nav=$('#nav');
+function route(){
+  var r=(location.hash||'#home').slice(1);if(routes.indexOf(r)<0)r='home';
+  if(r===cur)return;
+  var first=cur===null;cur=r;
+  $$('.view').forEach(function(v){var on=v.dataset.view===r;v.classList.toggle('active',on);v.classList.remove('enter');if(on&&!first){void v.offsetWidth;v.classList.add('enter')}});
+  $$('[data-route]').forEach(function(a){a.classList.toggle('on',a.dataset.route===r)});
+  window.scrollTo(0,0);
+  observe($('#v-'+r));
+  if(r==='access'){var f=$('#mapFrame');if(!f.src)f.src=f.dataset.src}
+  document.title=(r==='home'?'':({menu:'メニュー',gallery:'ギャラリー',access:'アクセス'})[r]+'｜')+'Lani OSAKA｜心斎橋のシーシャ&アミューズメントラウンジ';
+  onScroll();
+  smokes.forEach(function(s){s.resize()});
+}
+window.addEventListener('hashchange',route);
+
+/* ---------- menu sub tabs ---------- */
+$$('#subtabs button').forEach(function(b){b.addEventListener('click',function(){
+  var t=document.getElementById(b.dataset.jump);if(!t)return;
+  var y=t.getBoundingClientRect().top+window.scrollY-140;window.scrollTo({top:y,behavior:reduce?'auto':'smooth'});
+})});
+function syncSub(){
+  if(cur!=='menu')return;var best=null;
+  $$('#subtabs button').forEach(function(b){var t=document.getElementById(b.dataset.jump);if(t&&t.getBoundingClientRect().top<200)best=b});
+  $$('#subtabs button').forEach(function(b){b.classList.toggle('on',b===(best||$('#subtabs button')))});
+}
+
+/* ---------- scroll effects: header, parallax, zoom ---------- */
+var heroMedia=$('#heroMedia'),heroInner=$('#heroInner'),ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;var y=window.scrollY,h=innerHeight;
+    nav.classList.toggle('solid',y>40||cur!=='home');
+    if(reduce)return;
+    if(cur==='home'&&y<h*1.2){
+      heroMedia.style.transform='translate3d(0,'+(y*.35)+'px,0)';
+      var p=Math.min(1,y/(h*.7));heroInner.style.transform='translate3d(0,'+(y*.18)+'px,0) scale('+(1-p*.08)+')';heroInner.style.opacity=1-p;
+    }
+    $$('.view.active [data-para]').forEach(function(img){var r=img.parentNode.getBoundingClientRect();if(r.bottom>0&&r.top<h)img.style.transform='translate3d(0,'+(-r.top*.25)+'px,0)'});
+    $$('.view.active [data-zoom]').forEach(function(img){var r=img.getBoundingClientRect();if(r.bottom>0&&r.top<h){var p=1-(r.top+r.height/2)/(h+r.height/2);img.style.transform='scale('+(1.18-Math.max(0,Math.min(1,p))*.18)+')'}});
+    syncSub();
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+
+/* ---------- cursor glow + tilt (PC only) ---------- */
+if(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches&&!reduce){
+  var g=$('#glow'),gx=0,gy=0,tx=0,ty=0;
+  window.addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY});
+  (function loop(){gx+=(tx-gx)*.12;gy+=(ty-gy)*.12;g.style.transform='translate3d('+gx+'px,'+gy+'px,0)';requestAnimationFrame(loop)})();
+  $$('[data-tilt]').forEach(function(el){
+    el.addEventListener('pointermove',function(e){if(!el.classList.contains('in'))return;var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transition='transform .15s ease-out,border-color .4s';el.style.transform='perspective(900px) rotateX('+(-y*6)+'deg) rotateY('+(x*8)+'deg) translateY(-4px)'});
+    el.addEventListener('pointerleave',function(){el.style.transition='transform .8s cubic-bezier(.16,1,.3,1),border-color .4s';el.style.transform=''});
+  });
+}
+
+/* ---------- live open status ---------- */
+(function(){
+  var now=new Date(),h=now.getHours(),m=h*60+now.getMinutes(),open=m>=20*60||m<5*60;
+  var biz=new Date(now.getTime()-12*3600e3).getDay(); // 営業日（昼12時区切り）
+  var chip=$('#liveChip'),txt=$('#liveTxt');
+  if(open&&biz!==0){chip.classList.add('open');txt.textContent='営業中 〜5:00'}
+  else if(h>=12&&now.getDay()===0){txt.textContent='本日定休日'}
+  else{txt.textContent='本日 20:00 OPEN'}
+})();
+
+/* ---------- smoke canvas ---------- */
+var smokes=[];
+function Smoke(cv,amount){
+  var ctx=cv.getContext('2d'),ps=[],W=0,H=0,dpr=Math.min(2,window.devicePixelRatio||1),vis=false,run=false;
+  var sprite=document.createElement('canvas');sprite.width=sprite.height=128;
+  var sc=sprite.getContext('2d'),gr=sc.createRadialGradient(64,64,0,64,64,64);
+  gr.addColorStop(0,'rgba(235,225,205,.55)');gr.addColorStop(.4,'rgba(220,205,175,.22)');gr.addColorStop(1,'rgba(200,190,170,0)');sc.fillStyle=gr;sc.fillRect(0,0,128,128);
+  function resize(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+  function spawn(init){var s=40+Math.random()*120;return{x:Math.random()*W,y:init?Math.random()*H:H+s,s:s,vx:(Math.random()-.5)*.25,vy:-(.2+Math.random()*.45),a:0,max:.05+Math.random()*.08*amount,r:Math.random()*6.28,vr:(Math.random()-.5)*.003,g:1+Math.random()*.004}}
+  function frame(){
+    if(!vis){run=false;return}
+    ctx.clearRect(0,0,W,H);
+    var n=Math.round((W/14)*amount);while(ps.length<n)ps.push(spawn(ps.length<n/2));
+    ps.forEach(function(p,i){p.x+=p.vx+Math.sin((p.y+p.r*50)/90)*.25;p.y+=p.vy;p.r+=p.vr;p.s*=p.g;
+      var life=1-p.y/H;p.a=Math.min(p.max,p.a+.002);var al=p.a*Math.max(0,Math.min(1,(p.y+p.s)/(H*.6)));
+      ctx.save();ctx.globalAlpha=al;ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.drawImage(sprite,-p.s,-p.s,p.s*2,p.s*2);ctx.restore();
+      if(p.y<-p.s||al<=0&&p.y<H*.3)ps[i]=spawn(false)});
+    requestAnimationFrame(frame);
+  }
+  var ob=new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis&&!run){run=true;resize();requestAnimationFrame(frame)}});ob.observe(cv);
+  window.addEventListener('resize',resize);
+  return{resize:resize};
+}
+if(!reduce&&'IntersectionObserver' in window)$$('[data-smoke]').forEach(function(c){smokes.push(Smoke(c,+c.dataset.smoke||1))});
+
+/* ---------- lightbox ---------- */
+var lb=$('#lightbox');
+$$('.gal figure img').forEach(function(img){img.parentNode.addEventListener('click',function(){$('img',lb).src=img.src;$('img',lb).alt=img.alt;lb.classList.add('show')})});
+lb.addEventListener('click',function(){lb.classList.remove('show')});
+
+route();
 })();
 </script>
 </body>
