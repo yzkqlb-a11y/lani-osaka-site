@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Lani GAME｜Lani OSAKA</title>
-<meta name="description" content="Lani OSAKAの飲みゲーム。ルーレット・お題カード・ロシアンルーレットで盛り上がろう。">
+<meta name="description" content="Lani OSAKAの飲みゲーム。ルーレット・お題カード・ロシアンルーレット・指名ボトル・ハイ＆ロー・ナンバーボム・山手線ゲーム・サイコロで盛り上がろう。">
 <meta name="theme-color" content="#0b0b0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -234,6 +234,7 @@ function go(id,push){
   if(push!==false)history.pushState({s:id},'','#'+(id==='home'?'':id));
   window.scrollTo(0,0);
   if(id==='roulette')drawWheel(rot);
+  if(window.LaniGame&&LaniGame.onShow)LaniGame.onShow(id);
 }
 document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.go)})});
 $('backBtn').addEventListener('click',function(){history.length>1?history.back():go('home')});
@@ -387,6 +388,7 @@ document.querySelectorAll('[data-step]').forEach(function(b){b.addEventListener(
 $('rrReset').addEventListener('click',rrNew);
 rrNew();
 
+window.LaniGame={titles:titles,go:go,showResult:showResult,tone:tone,vibrate:vibrate,fanfare:fanfare,boom:boom,confetti:confetti,store:store,shuffle:shuffle};
 /* ---------- init ---------- */
 renderItems();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){drawWheel(rot)});
@@ -394,5 +396,6 @@ var h=(location.hash||'').slice(1);if(titles[h]!==undefined&&h)go(h,false);else 
 history.replaceState({s:h||'home'},'',location.href);
 })();
 </script>
+<script src="extra.js"></script>
 </body>
 </html>
